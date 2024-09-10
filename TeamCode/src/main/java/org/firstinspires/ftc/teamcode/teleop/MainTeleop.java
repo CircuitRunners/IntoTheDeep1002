@@ -59,7 +59,7 @@ public class MainTeleop extends OpMode {
         telemetry.addLine();
 
         driveFieldRelative(forward, right, rotate);
-        arm.armUpdate();
+        arm.update();
     }
 
     private void configureOTOS() {

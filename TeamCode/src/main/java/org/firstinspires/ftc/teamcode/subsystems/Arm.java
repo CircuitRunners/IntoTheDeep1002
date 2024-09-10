@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.util.Constants;
 import org.firstinspires.ftc.teamcode.util.HWValues;
 
@@ -19,12 +19,12 @@ public class Arm {
 
     public Arm(HardwareMap hardwareMap) {
         controller = new PIDController(Constants.ARM_P, Constants.ARM_I, Constants.ARM_D);
-
         arm_motor = hardwareMap.get(DcMotorEx.class, HWValues.ARM);
-
+        arm_motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void armUpdate() {
+    public void update() {
         controller.setPID(Constants.ARM_P, Constants.ARM_I, Constants.ARM_D);
         int armPos = arm_motor.getCurrentPosition();
         double pid = controller.calculate(armPos, target);
