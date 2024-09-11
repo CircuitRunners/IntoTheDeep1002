@@ -5,13 +5,24 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.util.Constants;
 import org.firstinspires.ftc.teamcode.util.HWValues;
 
 public class Arm {
+
+    final double ARM_TICKS_PER_DEGREE = Constants.ARM_TICKS_PER_DEGREE;
+    public final double ARM_COLLAPSED_INTO_ROBOT  = 0;
+    public final double ARM_COLLECT               = 250 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_CLEAR_BARRIER         = 230 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_SCORE_SPECIMEN        = 160 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_SCORE_SAMPLE_IN_LOW   = 160 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
+    public final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
+
     private PIDController controller;
 
-    public static int target = 0;
+    public static double target = 0;
 
     private final double ticks_in_degrees = Constants.ARM_TICKS_PER_DEGREE;
 
@@ -33,5 +44,17 @@ public class Arm {
         double power = pid + ff;
 
         arm_motor.setPower(power);
+    }
+
+    public void setArmPos(double position) {
+        target = position;
+    }
+
+    public double getArmPos() {
+        return arm_motor.getCurrentPosition();
+    }
+
+    public double getArmTarget() {
+        return target;
     }
 }

@@ -61,10 +61,4 @@ public class MecanumDrive {
 
         setPowers(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
-
-    public void holdPosition() {
-        double x = follower.getPose().getX();
-        double y = follower.getPose().getY();
-        follower.holdPoint(new BezierPoint(new Point(x, y, Point.CARTESIAN)), 0);
-    }
 }
