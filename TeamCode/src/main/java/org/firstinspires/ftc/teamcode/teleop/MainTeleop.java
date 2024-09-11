@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.util.Constants;
 import org.firstinspires.ftc.teamcode.util.HWValues;
 
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.EndEffector;
 
 @TeleOp(name = "Main TeleOp")
 public class MainTeleop extends OpMode {
@@ -19,12 +20,14 @@ public class MainTeleop extends OpMode {
     SparkFunOTOS sparkfunOTOS;
 
     Arm arm;
+    EndEffector endEffector;
 
     @Override
     public void init() {
         drive.init(hardwareMap);
         sparkfunOTOS = hardwareMap.get(SparkFunOTOS.class, HWValues.OTOS);
         arm = new Arm(hardwareMap);
+        endEffector = new EndEffector(hardwareMap);
         configureOTOS();
     }
 
@@ -83,6 +86,10 @@ public class MainTeleop extends OpMode {
             /* this moves the arm down to lift the robot up once it has been hooked */
             arm.setArmPos(arm.ARM_WINCH_ROBOT);
         }
+        driveFieldRelative(forward, right, rotate);
+        endEffector.diffyTurning(gamepad2);
+        endEffector.depositLoop(gamepad2);
+        arm.update();
 
         telemetry.addData("X (inch)", pos. x);
         telemetry.addData("Y (inch)", pos.y);
@@ -95,8 +102,7 @@ public class MainTeleop extends OpMode {
 
         telemetry.addLine();
 
-        driveFieldRelative(forward, right, rotate);
-        arm.update();
+
     }
 
     private void configureOTOS() {
