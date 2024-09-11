@@ -26,7 +26,7 @@ public class Constants {
     public static final double ARM_I = 0;
     public static final double ARM_D = 0;
     public static final double ARM_F = 0;
-    public static final double ARM_TICKS_PER_DEGREE = 0;
+    public static final double ARM_TICKS_PER_DEGREE = 500;
     public static final int ARM_TEST_TARGET = 0;
 
 

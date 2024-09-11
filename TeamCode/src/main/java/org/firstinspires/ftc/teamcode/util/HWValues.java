@@ -11,6 +11,9 @@ public class HWValues {
     public static final String ARM = "arm";
 
     // Servos
+    public static final String DIFFY1 = "diffy1";
+    public static final String DIFFY2 = "diffy2";
+    public static final String CLAW = "claw";
 
     // Sensors
     public static final String OTOS = "sensor_otos";

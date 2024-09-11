@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.util.Constants;
 import org.firstinspires.ftc.teamcode.util.HWValues;
 
@@ -20,13 +19,11 @@ public class Arm {
     public final double ARM_ATTACH_HANGING_HOOK   = 120 * ARM_TICKS_PER_DEGREE;
     public final double ARM_WINCH_ROBOT           = 15  * ARM_TICKS_PER_DEGREE;
 
-    private PIDController controller;
+    private final PIDController controller;
 
     public static double target = 0;
 
-    private final double ticks_in_degrees = Constants.ARM_TICKS_PER_DEGREE;
-
-    private DcMotorEx arm_motor;
+    private final DcMotorEx arm_motor;
 
     public Arm(HardwareMap hardwareMap) {
         controller = new PIDController(Constants.ARM_P, Constants.ARM_I, Constants.ARM_D);
@@ -39,6 +36,7 @@ public class Arm {
         controller.setPID(Constants.ARM_P, Constants.ARM_I, Constants.ARM_D);
         int armPos = arm_motor.getCurrentPosition();
         double pid = controller.calculate(armPos, target);
+        double ticks_in_degrees = Constants.ARM_TICKS_PER_DEGREE;
         double ff = Math.cos(Math.toRadians(target / ticks_in_degrees)) * Constants.ARM_F;
 
         double power = pid + ff;
