@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class RobotConstants {
     // Robot Characteristics
-    public static final double WEIGHT = 7.620352;
+    public static final double WEIGHT = 7.983226;
     // Robot height
     public static final double WIDTH = 14.3582677;
     // Robot width
