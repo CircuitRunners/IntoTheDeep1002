@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.config.util.action.RunAction;
 
 
 public class EndEffector {
-    private Telemetry telemetry;
     private final Servo claw;
     private final Servo diffy1;
     private final Servo diffy2;
@@ -21,7 +20,7 @@ public class EndEffector {
     // TODO
     public RunAction actions;
 
-    public EndEffector(HardwareMap hardwareMap, Telemetry telemetry) {
+    public EndEffector(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, HWValues.CLAW);
         diffy1 = hardwareMap.get(Servo.class, HWValues.DIFFY1);
         diffy2 = hardwareMap.get(Servo.class, HWValues.DIFFY2);
@@ -42,50 +41,57 @@ public class EndEffector {
 
 
     public void openClaw() {
-        claw.setPosition(0.4);
+        claw.setPosition(0.5);
     }
 
     public void closeClaw() {
         claw.setPosition(0);
     }
     public void idlePosition() {
-        diffy1.setPosition(0.43);
-        diffy2.setPosition(0.38);
+        diffy1.setPosition(0.32);
+        diffy2.setPosition(0.52);
     }
 
-    public void specimenPositionH() {
-        diffy1.setPosition(0.5);
-        diffy2.setPosition(0.5);
+    public void intakePositionH() {
+        diffy1.setPosition(0.65);
+        diffy2.setPosition(0.06);
     }
-    public void specimenPositionV() {
-        diffy1.setPosition(0.5);
-        diffy2.setPosition(0.5);
+    public void intakePositionV() {
+        diffy1.setPosition(0.44);
+        diffy2.setPosition(0.27);
     }
-    public void specimenPositionAL() {
-        diffy1.setPosition(0.5);
-        diffy2.setPosition(0.5);
+    public void intakePositionAL() {
+        diffy1.setPosition(0.38);
+        diffy2.setPosition(0.34);
     }
-    public void specimenPositionAR() {
-        diffy1.setPosition(0.5);
-        diffy2.setPosition(0.5);
+    public void intakePositionAR() {
+        diffy1.setPosition(0.14);
+        diffy2.setPosition(0.59);
     }
 
-    public void subPosition() {
+    public void specimenPosition() {
         diffy1.setPosition(0.5);
-        diffy2.setPosition(0.5);
+        diffy2.setPosition(0.72);
     }
     public void basketPosition() {
-        diffy1.setPosition(0.5);
-        diffy2.setPosition(0.5);
+        diffy1.setPosition(0.53);
+        diffy2.setPosition(0.71);
     }
     public void obsPosition() {
-        diffy1.setPosition(0.5);
-        diffy2.setPosition(0.5);
+        diffy1.setPosition(0.81);
+        diffy2.setPosition(0.18);
     }
 
     public void hangPosition() {
         diffy1.setPosition(0.5);
         diffy2.setPosition(0.5);
+    }
+
+    public void diffy1Set(double n){
+        diffy1.setPosition(n);
+    }
+    public void diffy2Set(double n) {
+        diffy2.setPosition(n);
     }
 
 
