@@ -24,7 +24,7 @@ public class EndEffector {
         claw = hardwareMap.get(Servo.class, HWValues.CLAW);
         diffy1 = hardwareMap.get(Servo.class, HWValues.DIFFY1);
         diffy2 = hardwareMap.get(Servo.class, HWValues.DIFFY2);
-        closeClaw();
+        openClaw();
         idlePosition();
     }
 
@@ -41,11 +41,11 @@ public class EndEffector {
 
 
     public void openClaw() {
-        claw.setPosition(0.5);
+        claw.setPosition(0);
     }
 
     public void closeClaw() {
-        claw.setPosition(0);
+        claw.setPosition(0.5);
     }
     public void idlePosition() {
         diffy1.setPosition(0.32);
@@ -70,8 +70,8 @@ public class EndEffector {
     }
 
     public void specimenPosition() {
-        diffy1.setPosition(0.5);
-        diffy2.setPosition(0.72);
+        diffy1.setPosition(0.30);
+        diffy2.setPosition(0.50);
     }
     public void basketPosition() {
         diffy1.setPosition(0.53);

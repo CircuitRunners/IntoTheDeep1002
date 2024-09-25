@@ -56,10 +56,12 @@ public class ManualDrive extends OpMode {
         }
         driveFieldRelative(forward, right, rotate);
 
-        if (gamepad2.dpad_up) {
+        if (gamepad2.dpad_down) {
+            endEffector.openClaw();
             arm.setArmTarget(Arm.ARM_INTAKE);
+            endEffector.intakePositionH();
         }
-        if (arm.getArmTarget() == Arm.ARM_INTAKE) {
+        if (arm.getArmTarget() < -4) {
             if (gamepad2.triangle) {
                 endEffector.intakePositionH();
             }
@@ -74,9 +76,23 @@ public class ManualDrive extends OpMode {
             }
         }
 
-        if (gamepad2.dpad_down) {
+        if (gamepad2.dpad_up) {
             arm.setArmTarget(Arm.ARM_LOWBASKET);
             endEffector.basketPosition();
+        }
+
+        if (gamepad2.dpad_right) {
+            arm.setArmTarget(Arm.ARM_SPECIMEN);
+            endEffector.specimenPosition();
+        }
+        if (gamepad2.dpad_left) {
+            arm.setArmTarget(Arm.OBSERVATION);
+            endEffector.obsPosition();
+        }
+        if (gamepad2.right_stick_button) {
+            arm.setArmTarget(Arm.ARM_MAX);
+            endEffector.openClaw();
+            endEffector.idlePosition();
         }
 
 //        if (gamepad2.right_bumper) {

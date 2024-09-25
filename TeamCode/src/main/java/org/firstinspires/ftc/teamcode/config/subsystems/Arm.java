@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.config.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.CustomPIDFCoefficients;
@@ -24,8 +25,8 @@ public class Arm {
     public static double ARM_SPEED = 0.05;
     public static double ARM_MIN = -4.85;
     public static double ARM_MAX = 1.95;
-    public static double ARM_LOWBASKET = 0;
-    public static double ARM_INTAKE = -4.37;
+    public static double ARM_LOWBASKET = -0.91;
+    public static double ARM_INTAKE = -4.2655;
     public static double ARM_SPECIMEN = -2.5;
     public static double OBSERVATION = 1;
     public static double HANG = 1;
@@ -47,6 +48,7 @@ public class Arm {
 
     public Arm(HardwareMap hardwareMap) {
         armMotor = hardwareMap.get(DcMotorEx.class, "arm");
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armStart = armMotor.getCurrentPosition();
         ARM_TARGET = armAngle();
     }
@@ -73,6 +75,10 @@ public class Arm {
 
     public void manual(double n) {
         setArmTarget(ARM_TARGET + n * ARM_SPEED);
+    }
+
+    public void resetEncoder() {
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 }
