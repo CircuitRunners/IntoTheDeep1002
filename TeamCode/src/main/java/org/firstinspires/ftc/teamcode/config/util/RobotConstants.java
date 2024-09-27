@@ -22,13 +22,20 @@ public class RobotConstants {
 
 
     // Arm Constants
-    public static final double ARM_P = 0;
-    public static final double ARM_I = 0;
-    public static final double ARM_D = 0;
-    public static final double ARM_F = 0;
-    public static final double ARM_TICKS_PER_DEGREE = 19.7924893140647;
-    public static final int ARM_TEST_TARGET = 0;
-
-
-
+    public static double armStart = 0.0;
+    public static double ARM_TARGET = 0.0;
+    public static double ARM_OFF = -2.01;
+    public static double ARM_SPEED = 0.05;
+    public static double ARM_MIN = -4.85;
+    public static double ARM_MAX = 1.95;
+    public static double ARM_LOWBASKET = -0.91;
+    public static double ARM_INTAKE = -4.2655;
+    public static double ARM_SPECIMEN = -2.5;
+    public static double ARM_OBSERVATION = 1;
+    public static double HANG = 1;
+    public static double kP = 1;
+    public static double kI = 0.02;
+    public static double kD = 0.02;
+    public static double f = -0.1;
+    public static double TICK_PER_RAD = ((((1+(46.0/17.0))) * (1+(46.0/17.0))) * (1+(46.0/17.0)) * 28) / 2*Math.PI / 3.2;
 }

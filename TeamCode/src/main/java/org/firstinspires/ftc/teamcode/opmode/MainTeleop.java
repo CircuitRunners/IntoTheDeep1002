@@ -12,14 +12,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import static org.firstinspires.ftc.teamcode.config.util.RobotConstants.*;
 
-@TeleOp(name = "Manual Drive", group = "Test")
-@Config
-public class ManualDrive extends OpMode {
+
+@TeleOp(name = "MainTeleop", group = "Test")
+public class MainTeleop extends OpMode {
     MecanumDrive drive = new MecanumDrive();
     SparkFunOTOS sparkfunOTOS;
     private Arm arm;
@@ -58,7 +58,7 @@ public class ManualDrive extends OpMode {
 
         if (gamepad2.dpad_down) {
             endEffector.openClaw();
-            arm.setArmTarget(Arm.ARM_INTAKE);
+            arm.setArmTarget(ARM_INTAKE);
             endEffector.intakePositionH();
         }
         if (arm.getArmTarget() < -4) {
@@ -77,43 +77,41 @@ public class ManualDrive extends OpMode {
         }
 
         if (gamepad2.dpad_up) {
-            arm.setArmTarget(Arm.ARM_LOWBASKET);
+            arm.setArmTarget(ARM_LOWBASKET);
             endEffector.basketPosition();
         }
 
         if (gamepad2.dpad_right) {
-            arm.setArmTarget(Arm.ARM_SPECIMEN);
+            arm.setArmTarget(ARM_SPECIMEN);
             endEffector.specimenPosition();
         }
         if (gamepad2.dpad_left) {
-            arm.setArmTarget(Arm.OBSERVATION);
+            arm.setArmTarget(ARM_OBSERVATION);
             endEffector.obsPosition();
         }
         if (gamepad2.right_stick_button) {
-            arm.setArmTarget(Arm.ARM_MAX);
+            arm.setArmTarget(ARM_MAX);
+            // arm.armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             endEffector.openClaw();
             endEffector.idlePosition();
         }
 
-//        if (gamepad2.right_bumper) {
-//            endEffector.diffy1Set(endEffector.getDiffy1Position() + 0.001);
-//        }
-//        if (gamepad2.left_bumper) {
-//            endEffector.diffy1Set(endEffector.getDiffy1Position() - 0.001);
-//        }
-//
-//        if (gamepad2.right_trigger > 0.5) {
-//            endEffector.diffy2Set(endEffector.getDiffy2Position() + 0.001);
-//        }
-//        if (gamepad2.left_trigger > 0.5) {
-//            endEffector.diffy2Set(endEffector.getDiffy2Position() - 0.001);
-//        }
-
         if (gamepad2.right_bumper) {
-            endEffector.closeClaw();
+            endEffector.diffy1Set(endEffector.getDiffy1Position() + 0.01);
         }
         if (gamepad2.left_bumper) {
-            endEffector.openClaw();
+            endEffector.diffy1Set(endEffector.getDiffy1Position() - 0.01);
+        }
+
+        if (gamepad2.right_trigger > 0.5) {
+            endEffector.diffy2Set(endEffector.getDiffy2Position() + 0.01);
+        }
+        if (gamepad2.left_trigger > 0.5) {
+            endEffector.diffy2Set(endEffector.getDiffy2Position() - 0.01);
+        }
+
+        if (gamepad2.left_stick_button) {
+            endEffector.switchClaw();
         }
 
         arm.manual(gamepad2.right_stick_y);
@@ -121,6 +119,7 @@ public class ManualDrive extends OpMode {
 
         // Telemetry
         telemetry.addData("Arm Target", arm.getArmTarget());
+        telemetry.addData("Arm Pos", arm.armMotor.getCurrentPosition());
         telemetry.addData("Claw Position", endEffector.getClawPosition());
         telemetry.update();
         arm.update();

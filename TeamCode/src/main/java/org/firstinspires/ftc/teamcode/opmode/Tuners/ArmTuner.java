@@ -11,14 +11,13 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.config.util.RobotConstants;
 
 @TeleOp
-@Config
 public class ArmTuner extends OpMode {
     private PIDController controller;
     public static double kP = 0.1, kI = 0, kD = 0.0002;
     public static double f = 0.00;
     public static int target = 0;
 
-    private final double ticks_in_degree = RobotConstants.ARM_TICKS_PER_DEGREE;
+    private final double ticks_in_degree = 19.7924893140647;
     private DcMotorEx arm_motor;
 
 

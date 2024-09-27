@@ -1,12 +1,7 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.config.util.HWValues;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 
 import org.firstinspires.ftc.teamcode.config.util.action.RunAction;
@@ -18,12 +13,26 @@ public class EndEffector {
     private final Servo diffy2;
 
     // TODO
-    public RunAction actions;
+    public RunAction openClaw, closeClaw, diffyIdle, diffyIntakeH, diffyIntakeV, diffyIntakeAL, diffyIntakeAR, diffySpecimen, diffyBasket, diffyObs, diffyHang;
 
     public EndEffector(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, HWValues.CLAW);
         diffy1 = hardwareMap.get(Servo.class, HWValues.DIFFY1);
         diffy2 = hardwareMap.get(Servo.class, HWValues.DIFFY2);
+
+        openClaw = new RunAction(this::openClaw);
+        closeClaw = new RunAction(this::closeClaw);
+
+        diffyIdle = new RunAction(this::idlePosition);
+        diffyIntakeH = new RunAction(this::intakePositionH);
+        diffyIntakeV = new RunAction(this::intakePositionV);
+        diffyIntakeAL = new RunAction(this::intakePositionAL);
+        diffyIntakeAR = new RunAction(this::intakePositionAR);
+        diffySpecimen = new RunAction(this::specimenPosition);
+        diffyBasket = new RunAction(this::basketPosition);
+        diffyObs = new RunAction(this::obsPosition);
+        diffyHang = new RunAction(this::hangPosition);
+
         openClaw();
         idlePosition();
     }
@@ -39,13 +48,19 @@ public class EndEffector {
         return diffy2.getPosition();
     }
 
-
     public void openClaw() {
         claw.setPosition(0);
     }
 
     public void closeClaw() {
-        claw.setPosition(0.5);
+        claw.setPosition(0.6);
+    }
+    public void switchClaw() {
+        if (claw.getPosition() < 0.5) {
+            closeClaw();
+        } else {
+            openClaw();
+        }
     }
     public void idlePosition() {
         diffy1.setPosition(0.32);
