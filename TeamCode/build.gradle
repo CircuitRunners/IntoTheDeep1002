@@ -36,6 +36,10 @@ android {
 repositories {
     maven {
         url = 'https://www.matthewo.tech/maven/'
+
+    }
+    maven{
+        url = 'https://maven.brott.dev/'
     }
 }
 dependencies {
@@ -47,7 +51,7 @@ dependencies {
     implementation 'org.openftc:easyopencv:1.7.0'
     implementation 'org.ftclib.ftclib:core:2.1.1'
     implementation "org.apache.commons:commons-math3:3.6.1"
-    implementation "com.acmerobotics.roadrunner:ftc:0.1.13"
+    implementation "com.acmerobotics.roadrunner:ftc:0.1.14"
     implementation "org.ftclib.ftclib:core:2.0.1"
     implementation 'org.team11260:fast-load:0.1.2'
 }
