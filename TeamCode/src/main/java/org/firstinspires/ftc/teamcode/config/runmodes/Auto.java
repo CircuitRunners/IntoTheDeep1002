@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
 public class Auto {
 
     private RobotStart startLocation;
-    private Arm arm;
-    private EndEffector endEffector;
+    public Arm arm;
+    public EndEffector endEffector;
 
     public Follower follower;
     public Telemetry telemetry;
