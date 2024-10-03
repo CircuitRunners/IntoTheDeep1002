@@ -63,38 +63,38 @@ public class EndEffector {
         }
     }
     public void idlePosition() {
-        diffy1.setPosition(0.32);
-        diffy2.setPosition(0.52);
+        diffy1.setPosition(0.73);
+        diffy2.setPosition(0.88);
     }
 
     public void intakePositionH() {
-        diffy1.setPosition(0.65);
-        diffy2.setPosition(0.06);
+        diffy1.setPosition(0.63);
+        diffy2.setPosition(0.80);
     }
     public void intakePositionV() {
         diffy1.setPosition(0.44);
-        diffy2.setPosition(0.27);
+        diffy2.setPosition(0.98);
     }
     public void intakePositionAL() {
-        diffy1.setPosition(0.38);
-        diffy2.setPosition(0.34);
+        diffy1.setPosition(0.52);
+        diffy2.setPosition(0.89);
     }
     public void intakePositionAR() {
-        diffy1.setPosition(0.14);
-        diffy2.setPosition(0.59);
+        diffy1.setPosition(0.75);
+        diffy2.setPosition(0.66);
     }
 
     public void specimenPosition() {
-        diffy1.setPosition(0.30);
-        diffy2.setPosition(0.50);
+        diffy1.setPosition(0.85);
+        diffy2.setPosition(0.98);
     }
     public void basketPosition() {
-        diffy1.setPosition(0.53);
-        diffy2.setPosition(0.71);
+        diffy1.setPosition(0.75);
+        diffy2.setPosition(0.88);
     }
     public void obsPosition() {
-        diffy1.setPosition(0.81);
-        diffy2.setPosition(0.18);
+        diffy1.setPosition(0.78);
+        diffy2.setPosition(0.93);
     }
 
     public void hangPosition() {
