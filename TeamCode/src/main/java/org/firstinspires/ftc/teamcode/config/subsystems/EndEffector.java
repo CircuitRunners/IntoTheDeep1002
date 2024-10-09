@@ -13,7 +13,7 @@ public class EndEffector {
     private final Servo diffy2;
 
     // TODO
-    public RunAction openClaw, closeClaw, diffyIdle, diffyIntakeH, diffyIntakeV, diffyIntakeAL, diffyIntakeAR, diffySpecimen, diffyBasket, diffyObs, diffyHang;
+    public RunAction openClaw, closeClaw, diffyIdle, diffyIntakeH, diffyIntakeV, diffyIntakeAL, diffyIntakeAR, diffySpecimen, diffyBasket, diffyObs, diffyHang, diffyClear, diffyScore;
 
     public EndEffector(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, HWValues.CLAW);
@@ -32,6 +32,8 @@ public class EndEffector {
         diffyBasket = new RunAction(this::basketPosition);
         diffyObs = new RunAction(this::obsPosition);
         diffyHang = new RunAction(this::hangPosition);
+        diffyClear = new RunAction(this::intakeClear);
+        diffyScore = new RunAction(this::specimenScorePosition);
 
         openClaw();
         idlePosition();
@@ -53,7 +55,7 @@ public class EndEffector {
     }
 
     public void closeClaw() {
-        claw.setPosition(0.6);
+        claw.setPosition(0.65);
     }
     public void switchClaw() {
         if (claw.getPosition() < 0.5) {
@@ -63,13 +65,18 @@ public class EndEffector {
         }
     }
     public void idlePosition() {
-        diffy1.setPosition(0.73);
-        diffy2.setPosition(0.88);
+        diffy1.setPosition(0.30);
+        diffy2.setPosition(0.26);
+    }
+
+    public void intakeClear() {
+        diffy1.setPosition(0.30);
+        diffy2.setPosition(0.26);
     }
 
     public void intakePositionH() {
-        diffy1.setPosition(0.63);
-        diffy2.setPosition(0.80);
+        diffy1.setPosition(0.39);
+        diffy2.setPosition(0.39);
     }
     public void intakePositionV() {
         diffy1.setPosition(0.44);
@@ -85,16 +92,21 @@ public class EndEffector {
     }
 
     public void specimenPosition() {
-        diffy1.setPosition(0.85);
-        diffy2.setPosition(0.98);
+        diffy1.setPosition(0.57);
+        diffy2.setPosition(0.56);
+    }
+
+    public void specimenScorePosition() {
+        diffy1.setPosition(0.57);
+        diffy2.setPosition(0.56);
     }
     public void basketPosition() {
-        diffy1.setPosition(0.75);
-        diffy2.setPosition(0.88);
+        diffy1.setPosition(0.57);
+        diffy2.setPosition(0.51);
     }
     public void obsPosition() {
-        diffy1.setPosition(0.78);
-        diffy2.setPosition(0.93);
+        diffy1.setPosition(0.48);
+        diffy2.setPosition(0.43);
     }
 
     public void hangPosition() {
@@ -105,6 +117,10 @@ public class EndEffector {
     public void diffy1Set(double n){
         diffy1.setPosition(n);
     }
+    public void diffy1increment() {diffy1.setPosition(diffy1.getPosition() + 0.01);}
+    public void diffy2increment() {diffy2.setPosition(diffy2.getPosition() + 0.01);}
+    public void diffy1decrement() {diffy1.setPosition(diffy1.getPosition() - 0.01);}
+    public void diffy2decrement() {diffy2.setPosition(diffy2.getPosition() - 0.01);}
     public void diffy2Set(double n) {
         diffy2.setPosition(n);
     }

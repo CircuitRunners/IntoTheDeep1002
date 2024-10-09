@@ -24,6 +24,11 @@ public class MainTeleop extends OpMode {
     SparkFunOTOS sparkfunOTOS;
     private Arm arm;
     private EndEffector endEffector;
+
+    private boolean prevLeftBumper = false;
+    private boolean prevRightBumper = false;
+    private boolean prevLeftTriggerPressed = false;
+    private boolean prevRightTriggerPressed = false;
     @Override
     public void init() {
         telemetry.addLine("Initializing...");
@@ -82,11 +87,17 @@ public class MainTeleop extends OpMode {
         }
 
         if (gamepad2.dpad_right) {
-            arm.setArmTarget(ARM_SPECIMEN);
-            endEffector.specimenPosition();
+            if (arm.getArmTarget() != ARM_SPECIMEN) {
+                arm.setArmTarget(ARM_SPECIMEN);
+                endEffector.specimenPosition();
+            } else {
+                arm.setArmTarget(ARM_SPECIMEN_SCORE);
+                endEffector.specimenScorePosition();
+            }
+
         }
         if (gamepad2.dpad_left) {
-            arm.setArmTarget(ARM_OBSERVATION);
+            arm.setArmTarget(ARM_MAX);
             endEffector.obsPosition();
         }
         if (gamepad2.right_stick_button) {
@@ -96,22 +107,43 @@ public class MainTeleop extends OpMode {
             endEffector.idlePosition();
         }
 
-        if (gamepad2.right_bumper) {
-            endEffector.diffy1Set(endEffector.getDiffy1Position() + 0.01);
-        }
-        if (gamepad2.left_bumper) {
-            endEffector.diffy1Set(endEffector.getDiffy1Position() - 0.01);
+        // Edge detection for left bumper (decrement diffy1)
+        if (gamepad2.left_bumper && !prevLeftBumper) {
+            endEffector.diffy1decrement();
         }
 
-        if (gamepad2.right_trigger > 0.5) {
-            endEffector.diffy2Set(endEffector.getDiffy2Position() + 0.01);
-        }
-        if (gamepad2.left_trigger > 0.5) {
-            endEffector.diffy2Set(endEffector.getDiffy2Position() - 0.01);
+        // Edge detection for right bumper (increment diffy1)
+        if (gamepad2.right_bumper && !prevRightBumper) {
+            endEffector.diffy1increment();
         }
 
-        if (gamepad2.left_stick_button) {
-            endEffector.switchClaw();
+        // Determine if triggers are pressed (threshold > 0.5)
+        boolean leftTriggerPressed = gamepad2.left_trigger > 0.5;
+        boolean rightTriggerPressed = gamepad2.right_trigger > 0.5;
+
+        // Edge detection for left trigger (decrement diffy2)
+        if (leftTriggerPressed && !prevLeftTriggerPressed) {
+            endEffector.diffy2decrement();
+        }
+
+        // Edge detection for right trigger (increment diffy2)
+        if (rightTriggerPressed && !prevRightTriggerPressed) {
+            endEffector.diffy2increment();
+        }
+
+
+        // Update previous state variables
+        prevLeftBumper = gamepad2.left_bumper;
+        prevRightBumper = gamepad2.right_bumper;
+        prevLeftTriggerPressed = leftTriggerPressed;
+        prevRightTriggerPressed = rightTriggerPressed;
+
+
+        if (gamepad2.start) {
+            endEffector.openClaw();
+        }
+        if (gamepad2.back) {
+            endEffector.closeClaw();
         }
 
         arm.manual(gamepad2.right_stick_y);
@@ -121,6 +153,9 @@ public class MainTeleop extends OpMode {
         telemetry.addData("Arm Target", arm.getArmTarget());
         telemetry.addData("Arm Pos", arm.armMotor.getCurrentPosition());
         telemetry.addData("Claw Position", endEffector.getClawPosition());
+        telemetry.addData("Diffy1 Position", "%.2f", endEffector.getDiffy1Position());
+        telemetry.addData("Diffy2 Position", "%.2f", endEffector.getDiffy2Position());
+        telemetry.update();
         telemetry.update();
         arm.update();
     }

@@ -28,12 +28,13 @@ public class RobotConstants {
     public static double ARM_SPEED = 0.05;
     public static double ARM_MIN = -4.85;
     public static double ARM_MAX = 1.95;
-    public static double ARM_LOWBASKET = -0.91;
-    public static double ARM_INTAKE = -4.2655;
-    public static double ARM_SPECIMEN = -2.5;
+    public static double ARM_LOWBASKET = -0.78;
+    public static double ARM_INTAKE = -4.51;
+    public static double ARM_SPECIMEN = -3;
+    public static double ARM_SPECIMEN_SCORE = -2.95;
     public static double ARM_OBSERVATION = 1;
     public static double HANG = 1;
-    public static double kP = 1;
+    public static double kP = 3;
     public static double kI = 0.02;
     public static double kD = 0.02;
     public static double f = -0.1;

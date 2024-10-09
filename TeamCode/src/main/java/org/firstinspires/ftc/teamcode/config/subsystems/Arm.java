@@ -25,7 +25,7 @@ public class Arm {
 
     public DcMotorEx armMotor;
 
-    public RunAction armLowBasket, armIntake, armSpecimen, armObservation, armMax;
+    public RunAction armLowBasket, armIntake, armSpecimen, armObservation, armMax, armSpecimenScore;
 
     private double armAngle() {
         return (armMotor.getCurrentPosition() - armStart)/TICK_PER_RAD - ARM_OFF;
@@ -45,6 +45,7 @@ public class Arm {
         armSpecimen = new RunAction(this::armSpecimen);
         armObservation = new RunAction(this::armObservation);
         armMax = new RunAction(this::armMax);
+        armSpecimenScore = new RunAction(this::armSpecimenScore);
     }
 
     public void update() {
@@ -56,11 +57,11 @@ public class Arm {
 
     public void setArmTarget(double target) {
         ARM_TARGET = target;
-        if (ARM_TARGET < ARM_MIN) {
-            ARM_TARGET = ARM_MIN;
-        } else if (ARM_TARGET > ARM_MAX) {
-            ARM_TARGET = ARM_MAX;
-        }
+//        if (ARM_TARGET < ARM_MIN) {
+//            ARM_TARGET = ARM_MIN;
+//        } else if (ARM_TARGET > ARM_MAX) {
+//            ARM_TARGET = ARM_MAX;
+//        }
     }
 
     public double getArmTarget() {
@@ -78,6 +79,7 @@ public class Arm {
     }
     public void armObservation() {setArmTarget(ARM_OBSERVATION);}
     public void armMax() {setArmTarget(ARM_MAX);}
+    public void armSpecimenScore() {setArmTarget(ARM_SPECIMEN_SCORE);}
 
 
 }
