@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.FeedForwardConstant;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.PIDFController;
@@ -27,7 +27,7 @@ public class Arm {
 
     public RunAction armLowBasket, armIntake, armSpecimen, armObservation, armMax, armSpecimenScore;
 
-    private double armAngle() {
+    public double armAngle() {
         return (armMotor.getCurrentPosition() - armStart)/TICK_PER_RAD - ARM_OFF;
     }
 
@@ -56,21 +56,25 @@ public class Arm {
     }
 
     public void setArmTarget(double target) {
-        ARM_TARGET = target;
-//        if (ARM_TARGET < ARM_MIN) {
-//            ARM_TARGET = ARM_MIN;
-//        } else if (ARM_TARGET > ARM_MAX) {
-//            ARM_TARGET = ARM_MAX;
-//        }
+        double currentDraw = armMotor.getCurrent(CurrentUnit.AMPS);
+
+        // If current exceeds the threshold, don't change the target to prevent damage
+        if (currentDraw > 9) {
+            // Optionally, log or alert to indicate that the current threshold was reached
+            System.out.println("Current threshold exceeded! Target position not updated.");
+            return; // Exit the method to prevent setting a new target
+        }
     }
 
     public double getArmTarget() {
         return ARM_TARGET;
     }
+    public double getArmPos()  { return armMotor.getCurrentPosition(); }
 
     public void manual(double n) {
         setArmTarget(ARM_TARGET + n * ARM_SPEED);
     }
+
 
     public void armLowBasket() {setArmTarget(ARM_LOWBASKET);}
     public void armIntake() {setArmTarget(ARM_INTAKE);}
@@ -80,6 +84,15 @@ public class Arm {
     public void armObservation() {setArmTarget(ARM_OBSERVATION);}
     public void armMax() {setArmTarget(ARM_MAX);}
     public void armSpecimenScore() {setArmTarget(ARM_SPECIMEN_SCORE);}
+
+    public void resetEncoder() {
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armStart = armMotor.getCurrentPosition();
+        ARM_TARGET = armAngle();
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+
 
 
 }

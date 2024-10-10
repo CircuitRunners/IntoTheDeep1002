@@ -25,10 +25,9 @@ public class MainTeleop extends OpMode {
     private Arm arm;
     private EndEffector endEffector;
 
-    private boolean prevLeftBumper = false;
-    private boolean prevRightBumper = false;
-    private boolean prevLeftTriggerPressed = false;
-    private boolean prevRightTriggerPressed = false;
+    private boolean shouldReverseInput = false; // Determines whether the input should be reversed
+    private boolean joystickWasZero = true; // Tracks if the joystick was released
+    private boolean prevTrianglePressed = false;
     @Override
     public void init() {
         telemetry.addLine("Initializing...");
@@ -53,13 +52,30 @@ public class MainTeleop extends OpMode {
         double forward = -gamepad1.left_stick_y;
         double right = gamepad1.left_stick_x;
         double rotate = gamepad1.right_stick_x;
-        if (gamepad1.y) {
+        if (gamepad1.x) {
             sparkfunOTOS.resetTracking();
         }
-        if (gamepad1.x) {
+        if (gamepad1.y) {
             sparkfunOTOS.calibrateImu();
         }
         driveFieldRelative(forward, right, rotate);
+
+        if (gamepad2.right_stick_y > 0.5) {
+            endEffector.diffy1increment();
+            endEffector.diffy2increment();
+        }
+        if (gamepad2.right_stick_y < -0.5) {
+            endEffector.diffy1decrement();
+            endEffector.diffy2decrement();
+        }
+        if (gamepad2.right_stick_x > 0.5) {
+            endEffector.diffy1increment();
+            endEffector.diffy2decrement();
+        }
+        if (gamepad2.right_stick_x < -0.5) {
+            endEffector.diffy1decrement();
+            endEffector.diffy2increment();
+        }
 
         if (gamepad2.dpad_down) {
             endEffector.openClaw();
@@ -107,51 +123,25 @@ public class MainTeleop extends OpMode {
             endEffector.idlePosition();
         }
 
-        // Edge detection for left bumper (decrement diffy1)
-        if (gamepad2.left_bumper && !prevLeftBumper) {
-            endEffector.diffy1decrement();
-        }
-
-        // Edge detection for right bumper (increment diffy1)
-        if (gamepad2.right_bumper && !prevRightBumper) {
-            endEffector.diffy1increment();
-        }
-
-        // Determine if triggers are pressed (threshold > 0.5)
-        boolean leftTriggerPressed = gamepad2.left_trigger > 0.5;
-        boolean rightTriggerPressed = gamepad2.right_trigger > 0.5;
-
-        // Edge detection for left trigger (decrement diffy2)
-        if (leftTriggerPressed && !prevLeftTriggerPressed) {
-            endEffector.diffy2decrement();
-        }
-
-        // Edge detection for right trigger (increment diffy2)
-        if (rightTriggerPressed && !prevRightTriggerPressed) {
-            endEffector.diffy2increment();
+        if (gamepad2.right_bumper && arm.getArmTarget() == ARM_MAX) {
+            arm.resetEncoder();
         }
 
 
-        // Update previous state variables
-        prevLeftBumper = gamepad2.left_bumper;
-        prevRightBumper = gamepad2.right_bumper;
-        prevLeftTriggerPressed = leftTriggerPressed;
-        prevRightTriggerPressed = rightTriggerPressed;
-
-
-        if (gamepad2.start) {
-            endEffector.openClaw();
+        if (gamepad2.triangle && !prevTrianglePressed) {
+            endEffector.switchClaw();
         }
-        if (gamepad2.back) {
-            endEffector.closeClaw();
-        }
+        prevTrianglePressed = gamepad2.triangle;
 
-        arm.manual(gamepad2.right_stick_y);
+
+
+
+       controlArm(gamepad2.left_stick_y);
 
 
         // Telemetry
         telemetry.addData("Arm Target", arm.getArmTarget());
-        telemetry.addData("Arm Pos", arm.armMotor.getCurrentPosition());
+        telemetry.addData("Arm Pos", arm.armAngle());
         telemetry.addData("Claw Position", endEffector.getClawPosition());
         telemetry.addData("Diffy1 Position", "%.2f", endEffector.getDiffy1Position());
         telemetry.addData("Diffy2 Position", "%.2f", endEffector.getDiffy2Position());
@@ -181,6 +171,28 @@ public class MainTeleop extends OpMode {
         double newRight = r * Math.cos(theta);
 
         drive.drive(newForward, newRight, rotate);
+    }
+
+    public void controlArm(double joystickInput) {
+        // Get the current arm angle
+        double target = arm.getArmTarget();
+
+        boolean isAboveThreshold = target > -1;
+
+        if (Math.abs(joystickInput) < 0.05) {
+            joystickWasZero = true; // Joystick is considered released
+        } else {
+            if (joystickWasZero) {
+                shouldReverseInput = isAboveThreshold;
+            }
+            joystickWasZero = false; // Joystick is now active
+        }
+
+        // Adjust the joystick input based on the shouldReverseInput flag
+        double adjustedInput = shouldReverseInput ? -joystickInput : joystickInput;
+
+        // Move the arm using the adjusted joystick input
+        arm.manual(adjustedInput);
     }
 
 }

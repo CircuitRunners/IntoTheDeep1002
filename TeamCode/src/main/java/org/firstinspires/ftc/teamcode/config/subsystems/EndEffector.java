@@ -58,7 +58,7 @@ public class EndEffector {
         claw.setPosition(0.65);
     }
     public void switchClaw() {
-        if (claw.getPosition() < 0.5) {
+        if (claw.getPosition() < 0.65) {
             closeClaw();
         } else {
             openClaw();
