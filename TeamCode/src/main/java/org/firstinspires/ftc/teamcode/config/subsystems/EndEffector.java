@@ -3,8 +3,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.config.util.HWValues;
 
-
+import org.firstinspires.ftc.teamcode.config.util.action.Action;
+import org.firstinspires.ftc.teamcode.config.util.action.Actions;
+import org.firstinspires.ftc.teamcode.config.util.action.ParallelAction;
 import org.firstinspires.ftc.teamcode.config.util.action.RunAction;
+import org.firstinspires.ftc.teamcode.config.util.action.SequentialAction;
+import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
+
 
 
 public class EndEffector {
@@ -58,7 +63,7 @@ public class EndEffector {
         claw.setPosition(0.65);
     }
     public void switchClaw() {
-        if (claw.getPosition() < 0.65) {
+        if (claw.getPosition() < 0.60) {
             closeClaw();
         } else {
             openClaw();
@@ -70,13 +75,13 @@ public class EndEffector {
     }
 
     public void intakeClear() {
-        diffy1.setPosition(0.30);
-        diffy2.setPosition(0.26);
+        diffy1.setPosition(0.38);
+        diffy2.setPosition(0.28);
     }
 
     public void intakePositionH() {
         diffy1.setPosition(0.39);
-        diffy2.setPosition(0.39);
+        diffy2.setPosition(0.28);
     }
     public void intakePositionV() {
         diffy1.setPosition(0.44);
@@ -101,12 +106,12 @@ public class EndEffector {
         diffy2.setPosition(0.56);
     }
     public void basketPosition() {
-        diffy1.setPosition(0.57);
-        diffy2.setPosition(0.51);
+        diffy1.setPosition(0.53);
+        diffy2.setPosition(0.47);
     }
     public void obsPosition() {
-        diffy1.setPosition(0.48);
-        diffy2.setPosition(0.43);
+        diffy1.setPosition(0.45);
+        diffy2.setPosition(0.4);
     }
 
     public void hangPosition() {
@@ -124,6 +129,8 @@ public class EndEffector {
     public void diffy2Set(double n) {
         diffy2.setPosition(n);
     }
+
+
 
 
 }

@@ -10,6 +10,15 @@ import org.firstinspires.ftc.teamcode.config.util.RobotConstants;
 import org.firstinspires.ftc.teamcode.config.util.HWValues;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.config.util.action.Action;
+import org.firstinspires.ftc.teamcode.config.util.action.SequentialAction;
+
+import org.firstinspires.ftc.teamcode.config.util.action.Action;
+import org.firstinspires.ftc.teamcode.config.util.action.Actions;
+import org.firstinspires.ftc.teamcode.config.util.action.ParallelAction;
+import org.firstinspires.ftc.teamcode.config.util.action.RunAction;
+import org.firstinspires.ftc.teamcode.config.util.action.SequentialAction;
+import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -28,6 +37,9 @@ public class MainTeleop extends OpMode {
     private boolean shouldReverseInput = false; // Determines whether the input should be reversed
     private boolean joystickWasZero = true; // Tracks if the joystick was released
     private boolean prevTrianglePressed = false;
+
+    private boolean prevDown = false;
+    private int intakeState = 0;
     @Override
     public void init() {
         telemetry.addLine("Initializing...");
@@ -77,26 +89,26 @@ public class MainTeleop extends OpMode {
             endEffector.diffy2increment();
         }
 
-        if (gamepad2.dpad_down) {
-            endEffector.openClaw();
-            arm.setArmTarget(ARM_INTAKE);
-            endEffector.intakePositionH();
+        if (gamepad2.dpad_down && !prevDown) {
+            if (arm.getArmTarget() != ARM_CLEAR && intakeState == 0) {
+                endEffector.openClaw();
+                arm.setArmTarget(ARM_CLEAR);
+                endEffector.intakeClear();
+                intakeState = 1;
+            } else if (intakeState == 0) {
+                endEffector.openClaw();
+                endEffector.intakeClear();
+                intakeState = 1;
+            } else if (intakeState == 1) {
+                endEffector.openClaw();
+                arm.setArmTarget(ARM_INTAKE);
+                intakeState = 2;
+            } else if (intakeState == 2) {
+                Actions.runBlocking(intakePickup());
+                intakeState = 0;
+            }
         }
-        if (arm.getArmTarget() < -4) {
-            if (gamepad2.triangle) {
-                endEffector.intakePositionH();
-            }
-            if (gamepad2.cross) {
-                endEffector.intakePositionV();
-            }
-            if (gamepad2.square) {
-                endEffector.intakePositionAL();
-            }
-            if (gamepad2.circle) {
-                endEffector.intakePositionAR();
-            }
-        }
-
+        prevDown = gamepad2.dpad_down;
         if (gamepad2.dpad_up) {
             arm.setArmTarget(ARM_LOWBASKET);
             endEffector.basketPosition();
@@ -116,9 +128,8 @@ public class MainTeleop extends OpMode {
             arm.setArmTarget(ARM_MAX);
             endEffector.obsPosition();
         }
-        if (gamepad2.right_stick_button) {
+        if (gamepad2.left_stick_button) {
             arm.setArmTarget(ARM_MAX);
-            // arm.armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             endEffector.openClaw();
             endEffector.idlePosition();
         }
@@ -127,17 +138,12 @@ public class MainTeleop extends OpMode {
             arm.resetEncoder();
         }
 
-
         if (gamepad2.triangle && !prevTrianglePressed) {
             endEffector.switchClaw();
         }
         prevTrianglePressed = gamepad2.triangle;
 
-
-
-
        controlArm(gamepad2.left_stick_y);
-
 
         // Telemetry
         telemetry.addData("Arm Target", arm.getArmTarget());
@@ -177,7 +183,7 @@ public class MainTeleop extends OpMode {
         // Get the current arm angle
         double target = arm.getArmTarget();
 
-        boolean isAboveThreshold = target > -1;
+        boolean isAboveThreshold = target > -1.63;
 
         if (Math.abs(joystickInput) < 0.05) {
             joystickWasZero = true; // Joystick is considered released
@@ -192,7 +198,15 @@ public class MainTeleop extends OpMode {
         double adjustedInput = shouldReverseInput ? -joystickInput : joystickInput;
 
         // Move the arm using the adjusted joystick input
-        arm.manual(adjustedInput);
+        arm.manual(-adjustedInput);
+    }
+
+    public Action intakePickup() {
+        return new SequentialAction(
+                endEffector.closeClaw,
+                new SleepAction(0.4),
+                arm.armClear
+        );
     }
 
 }
