@@ -40,8 +40,8 @@ public class EndEffector {
         diffyClear = new RunAction(this::intakeClear);
         diffyScore = new RunAction(this::specimenScorePosition);
 
-        openClaw();
-        idlePosition();
+       // openClaw();
+        //idlePosition();
     }
 
     public double getClawPosition() {

@@ -44,17 +44,27 @@ public class blueLeftBucket extends OpMode{
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                follower.followPath(basketClear);
+                Actions.runBlocking(endEffector.closeClaw);
+                Actions.runBlocking(endEffector.diffyIdle);
                 setPathState(1);
-                break;
             case 1:
-                Actions.runBlocking(arm.armLowBasket);
-                follower.followPath(score);
+                Actions.runBlocking(endEffector.closeClaw);
+                follower.followPath(basketClear);
                 setPathState(2);
+                break;
             case 2:
-                follower.followPath(score);
+                Actions.runBlocking(endEffector.closeClaw);
+                Actions.runBlocking(arm.armLowBasket);
+                Actions.runBlocking(endEffector.diffyBasket);
                 setPathState(3);
             case 3:
+                Actions.runBlocking(endEffector.closeClaw);
+                follower.followPath(score);
+                setPathState(4);
+            case 4:
+              //Actions.runBlocking(endEffector.openClaw);
+              setPathState(5);
+            case 5:
                 if (!follower.isBusy()) {
                     setPathState(-1);
                 }
@@ -91,6 +101,7 @@ public class blueLeftBucket extends OpMode{
         follower.setStartingPose(startPosition);
         arm = new Arm(hardwareMap);
         endEffector = new EndEffector(hardwareMap);
+        //endEffector.closeClaw();
         buildPaths();
     }
 

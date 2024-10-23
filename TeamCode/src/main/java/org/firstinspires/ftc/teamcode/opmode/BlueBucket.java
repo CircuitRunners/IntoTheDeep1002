@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.config.runmodes.Auto;
+import org.firstinspires.ftc.teamcode.config.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.config.util.action.Actions;
 
 @Autonomous(name="BlueBucket", group="B")
 public class BlueBucket extends OpMode {
@@ -14,6 +16,7 @@ public class BlueBucket extends OpMode {
     @Override
     public void init() {
         auto = new Auto(hardwareMap, telemetry, new Follower(hardwareMap), true, true);
+
     }
 
     @Override
@@ -30,11 +33,14 @@ public class BlueBucket extends OpMode {
     public void loop() {
         auto.update();
         pathUpdate();
+
     }
 
     public void pathUpdate() {
         switch (pathState) {
             case 0:
+//                Actions.runBlocking(auto.arm.armSpecimen);
+//                Actions.runBlocking(auto.endEffector.diffySpecimen);
                 auto.follower.followPath(auto.preload);
                 setPathState(1);
                 break;
