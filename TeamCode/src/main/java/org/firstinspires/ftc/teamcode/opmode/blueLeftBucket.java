@@ -9,32 +9,52 @@ import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.BezierL
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.Timer;
+import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
+import org.firstinspires.ftc.teamcode.config.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.config.util.action.Actions;
 
 @Autonomous
-public class blueLeftPark extends OpMode{
+public class blueLeftBucket extends OpMode{
     private Follower follower;
     private Timer pathTimer;
     private int pathState;
+    private Arm arm;
+
+    private EndEffector endEffector;
 
     // Define key poses
     private Pose startPosition = new Pose(7.5, 80, Math.toRadians(180));
+    private Pose bucketClear = new Pose(11, 121, Math.toRadians(315));
+    private Pose bucketPos = new Pose(6.2, 125,Math.toRadians(315));
     private Pose parkPos = new Pose(7.5, 40, Math.toRadians(180));
 
-    private PathChain cycle;
+
+    private PathChain basketClear, score;
     public void buildPaths() {
-        cycle = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPosition), new Point(parkPos)))
-                .setConstantHeadingInterpolation(parkPos.getHeading())
+        basketClear = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(startPosition), new Point(bucketClear)))
+                .setConstantHeadingInterpolation(bucketClear.getHeading())
+                .build();
+        score = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(bucketClear), new Point(bucketPos)))
+                .setConstantHeadingInterpolation(bucketPos.getHeading())
                 .build();
     }
 
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                follower.followPath(cycle);
+                follower.followPath(basketClear);
                 setPathState(1);
                 break;
             case 1:
+                Actions.runBlocking(arm.armLowBasket);
+                follower.followPath(score);
+                setPathState(2);
+            case 2:
+                follower.followPath(score);
+                setPathState(3);
+            case 3:
                 if (!follower.isBusy()) {
                     setPathState(-1);
                 }
@@ -54,6 +74,7 @@ public class blueLeftPark extends OpMode{
     @Override
     public void loop() {
         follower.update();
+        arm.update();
         autonomousPathUpdate();
 
         telemetry.addData("path state", pathState);
@@ -68,6 +89,8 @@ public class blueLeftPark extends OpMode{
         pathTimer = new Timer();
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPosition);
+        arm = new Arm(hardwareMap);
+        endEffector = new EndEffector(hardwareMap);
         buildPaths();
     }
 

@@ -16,7 +16,7 @@ public class RobotConstants {
     public static final double X_OFFSET = 0;
     public static final double PEDRO_Y_OFFSET = -2.83465;
     public static final double PEDRO_X_OFFSET = 0;
-    public static final double PEDRO_H_OFFSET = 270; // In degrees
+    public static final double PEDRO_H_OFFSET = 90; // In degrees
     public static final double L_SCALER = 1.0;
     public static final double A_SCALER = 0.98872139;
 
