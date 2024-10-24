@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.config.util.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
 
 @Autonomous
-public class blueLeftBucket extends OpMode{
+public class redRightBucket extends OpMode{
     private Follower follower;
     private Timer pathTimer;
     private int pathState;
@@ -27,9 +27,9 @@ public class blueLeftBucket extends OpMode{
     private EndEffector endEffector;
 
     // Define key poses
-    private Pose startPosition = new Pose(7.5, 80, Math.toRadians(180));
-    private Pose bucketClear = new Pose(12, 121, Math.toRadians(315));
-    private Pose bucketPos = new Pose(6.2, 125,Math.toRadians(315));
+    private Pose startPosition = new Pose(140, 80, Math.toRadians(0));
+    private Pose bucketClear = new Pose(12, 121, Math.toRadians(225));
+    private Pose bucketPos = new Pose(141.3, 125,Math.toRadians(225));
     private Pose parkPos = new Pose(7.5, 40, Math.toRadians(180));
 
 
@@ -43,6 +43,7 @@ public class blueLeftBucket extends OpMode{
                 .addPath(new BezierLine(new Point(bucketClear), new Point(bucketPos)))
                 .setConstantHeadingInterpolation(bucketPos.getHeading())
                 .build();
+
         park = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(bucketPos), new Point(parkPos)))
                 .setConstantHeadingInterpolation(parkPos.getHeading())
@@ -70,8 +71,8 @@ public class blueLeftBucket extends OpMode{
                 follower.followPath(score);
                 setPathState(4);
             case 4:
-              Actions.runBlocking(endEffector.openClaw);
-              setPathState(5);
+                Actions.runBlocking(endEffector.openClaw);
+                setPathState(5);
             case 5:
                 Actions.runBlocking(resetArm());
                 follower.followPath(park);
@@ -133,7 +134,6 @@ public class blueLeftBucket extends OpMode{
                 )
         );
     }
-
 
 
 }

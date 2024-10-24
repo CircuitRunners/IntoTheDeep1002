@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.opmode;
+package org.firstinspires.ftc.teamcode.opmode.Archive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.follower.Follower;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.PathCha
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.Timer;
 
+@Disabled
 @Autonomous
 public class testBuilder extends OpMode{
     private Follower follower;

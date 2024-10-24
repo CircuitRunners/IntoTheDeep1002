@@ -1,13 +1,14 @@
-package org.firstinspires.ftc.teamcode.opmode;
+package org.firstinspires.ftc.teamcode.opmode.Archive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.config.runmodes.Auto;
 import org.firstinspires.ftc.teamcode.config.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.config.util.action.Actions;
-
+@Disabled
 @Autonomous(name="BlueBucket", group="B")
 public class BlueBucket extends OpMode {
     public int pathState;
