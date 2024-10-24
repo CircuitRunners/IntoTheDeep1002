@@ -134,7 +134,7 @@ public class MainTeleop extends OpMode {
             endEffector.idlePosition();
         }
 
-        if (gamepad2.right_bumper && arm.getArmTarget() == ARM_MAX) {
+        if (gamepad2.right_bumper) {
             arm.resetEncoder();
         }
 
@@ -148,6 +148,7 @@ public class MainTeleop extends OpMode {
         // Telemetry
         telemetry.addData("Arm Target", arm.getArmTarget());
         telemetry.addData("Arm Pos", arm.armAngle());
+        telemetry.addData("Current", arm.getArmCurrent());
         telemetry.addData("Claw Position", endEffector.getClawPosition());
         telemetry.addData("Diffy1 Position", "%.2f", endEffector.getDiffy1Position());
         telemetry.addData("Diffy2 Position", "%.2f", endEffector.getDiffy2Position());

@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.config.util.action.ParallelAction;
 import org.firstinspires.ftc.teamcode.config.util.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
 
+
 @Autonomous
 public class blueLeftBucket extends OpMode{
     private Follower follower;
@@ -28,9 +29,11 @@ public class blueLeftBucket extends OpMode{
 
     // Define key poses
     private Pose startPosition = new Pose(7.5, 80, Math.toRadians(180));
-    private Pose bucketClear = new Pose(12, 121, Math.toRadians(315));
+    private Pose bucketClear = new Pose(20, 110, Math.toRadians(315));
     private Pose bucketPos = new Pose(6.2, 125,Math.toRadians(315));
-    private Pose parkPos = new Pose(7.5, 40, Math.toRadians(180));
+    private Pose preprePark = new Pose(7,105,Math.toRadians(0));
+    private Pose prePark = new Pose(48,105,Math.toRadians(270));
+    private Pose parkPos = new Pose(55, 102, Math.toRadians(270));
 
 
     private PathChain basketClear, score, park;
@@ -44,7 +47,11 @@ public class blueLeftBucket extends OpMode{
                 .setConstantHeadingInterpolation(bucketPos.getHeading())
                 .build();
         park = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(bucketPos), new Point(parkPos)))
+                .addPath(new BezierLine(new Point(bucketPos), new Point(preprePark)))
+                .setConstantHeadingInterpolation(preprePark.getHeading())
+                .addPath(new BezierLine(new Point(preprePark), new Point(prePark)))
+                .setConstantHeadingInterpolation(prePark.getHeading())
+                .addPath(new BezierLine(new Point(prePark), new Point(parkPos)))
                 .setConstantHeadingInterpolation(parkPos.getHeading())
                 .build();
     }
@@ -55,28 +62,50 @@ public class blueLeftBucket extends OpMode{
                 Actions.runBlocking(endEffector.closeClaw);
                 Actions.runBlocking(endEffector.diffyIdle);
                 setPathState(1);
+                break;
             case 1:
-                Actions.runBlocking(endEffector.closeClaw);
-                follower.followPath(basketClear);
-                setPathState(2);
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(endEffector.closeClaw);
+                    follower.followPath(basketClear);
+                    setPathState(2);
+                }
                 break;
             case 2:
-                Actions.runBlocking(endEffector.closeClaw);
-                Actions.runBlocking(arm.armLowBasket);
-                Actions.runBlocking(endEffector.diffyBasket);
-                setPathState(3);
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(endEffector.closeClaw);
+                    Actions.runBlocking(arm.armLowBasket);
+                    Actions.runBlocking(endEffector.diffyBasket);
+//                    Actions.runBlocking(new SleepAction(1));
+                    setPathState(3);
+                }
+                break;
             case 3:
-                Actions.runBlocking(endEffector.closeClaw);
-                follower.followPath(score);
-                setPathState(4);
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(endEffector.closeClaw);
+                    follower.followPath(score);
+                    setPathState(4);
+                }
+                break;
             case 4:
-              Actions.runBlocking(endEffector.openClaw);
-              setPathState(5);
+              if (!follower.isBusy()) {
+                  Actions.runBlocking(endEffector.openClaw);
+                  setPathState(5);
+              }
+              break;
             case 5:
-                Actions.runBlocking(resetArm());
-                follower.followPath(park);
-                setPathState(6);
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(resetArm());
+                    follower.followPath(park);
+                    setPathState(6);
+                }
+                break;
             case 6:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(arm.armSpecimenScore);
+                    Actions.runBlocking(new SleepAction(5));
+                    setPathState(7);
+                }
+            case 7:
                 if (!follower.isBusy()) {
                     setPathState(-1);
                 }
@@ -113,7 +142,8 @@ public class blueLeftBucket extends OpMode{
         follower.setStartingPose(startPosition);
         arm = new Arm(hardwareMap);
         endEffector = new EndEffector(hardwareMap);
-        //endEffector.closeClaw();
+        endEffector.closeClaw();
+        endEffector.idlePosition();
         buildPaths();
     }
 
@@ -126,14 +156,12 @@ public class blueLeftBucket extends OpMode{
     public Action resetArm() {
         return new SequentialAction(
                 new SleepAction(1),
-                arm.armObservation,
                 new ParallelAction(
                         endEffector.diffyIdle,
                         arm.armObservation
-                )
+                ),
+                arm.armUpright
         );
     }
-
-
 
 }

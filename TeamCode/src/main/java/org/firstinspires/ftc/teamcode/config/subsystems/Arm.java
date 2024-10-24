@@ -25,7 +25,7 @@ public class Arm {
 
     public DcMotorEx armMotor;
 
-    public RunAction armLowBasket, armIntake, armSpecimen, armObservation, armMax, armSpecimenScore, armClear;
+    public RunAction armLowBasket, armIntake, armSpecimen, armObservation, armMax, armSpecimenScore, armClear, armUpright;
 
     public double armAngle() {
         return (armMotor.getCurrentPosition() - armStart)/TICK_PER_RAD - ARM_OFF;
@@ -47,6 +47,7 @@ public class Arm {
         armMax = new RunAction(this::armMax);
         armSpecimenScore = new RunAction(this::armSpecimenScore);
         armClear = new RunAction(this::armClear);
+        armUpright = new RunAction(this::armUpright);
     }
 
     public void update() {
@@ -60,13 +61,12 @@ public class Arm {
         double currentDraw = armMotor.getCurrent(CurrentUnit.AMPS);
 
         // If current exceeds the threshold, don't change the target to prevent damage
-        if (currentDraw > 6) {
-            // Optionally, log or alert to indicate that the current threshold was reached
-            System.out.println("Current threshold exceeded! Target position not updated.");
+        if (currentDraw > 2 && target > armAngle()) {
             return; // Exit the method to prevent setting a new target
         }
         ARM_TARGET = target;
     }
+    public double getArmCurrent() {return armMotor.getCurrent(CurrentUnit.AMPS);}
 
     public double getArmTarget() {
         return ARM_TARGET;
@@ -88,6 +88,7 @@ public class Arm {
     public void armSpecimenScore() {setArmTarget(ARM_SPECIMEN_SCORE);}
 
     public void armClear() {setArmTarget(ARM_CLEAR);}
+    public void armUpright() {setArmTarget(-1.67);}
 
     public void resetEncoder() {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
