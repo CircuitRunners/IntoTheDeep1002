@@ -9,36 +9,63 @@ import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.BezierL
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.Timer;
-import org.firstinspires.ftc.teamcode.config.util.action.Action;
-import org.firstinspires.ftc.teamcode.config.util.action.SequentialAction;
-import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
+import org.firstinspires.ftc.teamcode.config.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
+import org.firstinspires.ftc.teamcode.config.util.action.Actions;
 
 @Autonomous
-public class redLeftPark extends OpMode {
+public class redLeftBucket extends OpMode {
     private Follower follower;
     private Timer pathTimer;
     private int pathState;
+    private Arm arm;
+
+    private EndEffector endEffector;
 
     // Define key poses
     private Pose startPosition = new Pose(133.5, 60, Math.toRadians(180));
+    private Pose bucketClear = new Pose(125, 18, Math.toRadians(315));
+    private Pose bucketPos = new Pose(133, 15,Math.toRadians(315));
     private Pose parkPos = new Pose(133.5, 110, Math.toRadians(180));
+    //points are still untested/rough
 
 
-    private PathChain cycle;
+    private PathChain basketClear, score;
     public void buildPaths() {
-        cycle = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPosition), new Point(parkPos)))
-                .setConstantHeadingInterpolation(parkPos.getHeading())
+        basketClear = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(startPosition), new Point(bucketClear)))
+                .setConstantHeadingInterpolation(bucketClear.getHeading())
+                .build();
+        score = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(bucketClear), new Point(bucketPos)))
+                .setConstantHeadingInterpolation(bucketPos.getHeading())
                 .build();
     }
 
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                follower.followPath(cycle);
+                Actions.runBlocking(endEffector.closeClaw);
+                Actions.runBlocking(endEffector.diffyIdle);
                 setPathState(1);
-                break;
             case 1:
+                Actions.runBlocking(endEffector.closeClaw);
+                follower.followPath(basketClear);
+                setPathState(2);
+                break;
+            case 2:
+                Actions.runBlocking(endEffector.closeClaw);
+                Actions.runBlocking(arm.armLowBasket);
+                Actions.runBlocking(endEffector.diffyBasket);
+                setPathState(3);
+            case 3:
+                Actions.runBlocking(endEffector.closeClaw);
+                follower.followPath(score);
+                setPathState(4);
+            case 4:
+                //Actions.runBlocking(endEffector.openClaw);
+                setPathState(5);
+            case 5:
                 if (!follower.isBusy()) {
                     setPathState(-1);
                 }
@@ -58,6 +85,7 @@ public class redLeftPark extends OpMode {
     @Override
     public void loop() {
         follower.update();
+        arm.update();
         autonomousPathUpdate();
 
         telemetry.addData("path state", pathState);
@@ -72,6 +100,9 @@ public class redLeftPark extends OpMode {
         pathTimer = new Timer();
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPosition);
+        arm = new Arm(hardwareMap);
+        endEffector = new EndEffector(hardwareMap);
+        //endEffector.closeClaw();
         buildPaths();
     }
 
