@@ -11,7 +11,11 @@ import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.Timer;
 import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
 import org.firstinspires.ftc.teamcode.config.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.config.util.action.Action;
 import org.firstinspires.ftc.teamcode.config.util.action.Actions;
+import org.firstinspires.ftc.teamcode.config.util.action.ParallelAction;
+import org.firstinspires.ftc.teamcode.config.util.action.SequentialAction;
+import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
 
 @Autonomous
 public class blueLeftBucket extends OpMode{
@@ -29,7 +33,7 @@ public class blueLeftBucket extends OpMode{
     private Pose parkPos = new Pose(7.5, 40, Math.toRadians(180));
 
 
-    private PathChain basketClear, score;
+    private PathChain basketClear, score, park;
     public void buildPaths() {
         basketClear = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(startPosition), new Point(bucketClear)))
@@ -38,6 +42,10 @@ public class blueLeftBucket extends OpMode{
         score = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(bucketClear), new Point(bucketPos)))
                 .setConstantHeadingInterpolation(bucketPos.getHeading())
+                .build();
+        park = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(bucketPos), new Point(parkPos)))
+                .setConstantHeadingInterpolation(parkPos.getHeading())
                 .build();
     }
 
@@ -62,9 +70,13 @@ public class blueLeftBucket extends OpMode{
                 follower.followPath(score);
                 setPathState(4);
             case 4:
-              //Actions.runBlocking(endEffector.openClaw);
+              Actions.runBlocking(endEffector.openClaw);
               setPathState(5);
             case 5:
+                Actions.runBlocking(resetArm());
+                follower.followPath(park);
+                setPathState(6);
+            case 6:
                 if (!follower.isBusy()) {
                     setPathState(-1);
                 }
@@ -110,6 +122,18 @@ public class blueLeftBucket extends OpMode{
         pathTimer.resetTimer();
         setPathState(0);
     }
+
+    public Action resetArm() {
+        return new SequentialAction(
+                new SleepAction(1),
+                arm.armObservation,
+                new ParallelAction(
+                        endEffector.diffyIdle,
+                        arm.armObservation
+                )
+        );
+    }
+
 
 
 }

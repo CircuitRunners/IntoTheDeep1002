@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode.opmode;
+package org.firstinspires.ftc.teamcode.opmode.Archive;
 
 import org.firstinspires.ftc.teamcode.config.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.follower.Follower;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.config.pedroPathing.util.Timer;
 
 import org.firstinspires.ftc.teamcode.config.util.action.Actions;
 
+@Disabled
 @Autonomous
 public class LinearAuto extends OpMode{
     private Follower follower;
