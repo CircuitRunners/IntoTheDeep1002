@@ -24,7 +24,7 @@ public class blueLeftBucket extends OpMode{
 
     // Define key poses
     private Pose startPosition = new Pose(7.5, 80, Math.toRadians(180));
-    private Pose bucketClear = new Pose(11, 121, Math.toRadians(315));
+    private Pose bucketClear = new Pose(12, 121, Math.toRadians(315));
     private Pose bucketPos = new Pose(6.2, 125,Math.toRadians(315));
     private Pose parkPos = new Pose(7.5, 40, Math.toRadians(180));
 
