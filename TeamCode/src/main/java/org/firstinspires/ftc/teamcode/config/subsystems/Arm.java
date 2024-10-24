@@ -57,13 +57,18 @@ public class Arm {
         armMotor.setPower(armPID.runPIDF());
     }
 
-    public void setArmTarget(double target) {
+    public void setArmTarget(double target, double direction, boolean button) {
         double currentDraw = armMotor.getCurrent(CurrentUnit.AMPS);
 
         // If current exceeds the threshold, don't change the target to prevent damage
-        if (currentDraw > 2 && target > armAngle()) {
+        if (currentDraw > 2 && direction > 0 && !button) {
             return; // Exit the method to prevent setting a new target
         }
+        ARM_TARGET = target;
+    }
+    public void setArmTarget(double target) {
+        double currentDraw = armMotor.getCurrent(CurrentUnit.AMPS);
+
         ARM_TARGET = target;
     }
     public double getArmCurrent() {return armMotor.getCurrent(CurrentUnit.AMPS);}
@@ -75,6 +80,9 @@ public class Arm {
 
     public void manual(double n) {
         setArmTarget(ARM_TARGET + n * ARM_SPEED);
+    }
+    public void manual(double n, double direction, boolean button) {
+        setArmTarget(ARM_TARGET + n * ARM_SPEED, direction, button);
     }
 
 

@@ -143,7 +143,7 @@ public class MainTeleop extends OpMode {
         }
         prevTrianglePressed = gamepad2.triangle;
 
-       controlArm(gamepad2.left_stick_y);
+       controlArm(gamepad2.left_stick_y, gamepad2.left_bumper);
 
         // Telemetry
         telemetry.addData("Arm Target", arm.getArmTarget());
@@ -180,7 +180,7 @@ public class MainTeleop extends OpMode {
         drive.drive(newForward, newRight, rotate);
     }
 
-    public void controlArm(double joystickInput) {
+    public void controlArm(double joystickInput, boolean buttonPressed) {
         // Get the current arm angle
         double target = arm.getArmTarget();
 
@@ -197,9 +197,8 @@ public class MainTeleop extends OpMode {
 
         // Adjust the joystick input based on the shouldReverseInput flag
         double adjustedInput = shouldReverseInput ? -joystickInput : joystickInput;
-
         // Move the arm using the adjusted joystick input
-        arm.manual(-adjustedInput);
+        arm.manual(-adjustedInput, joystickInput, buttonPressed);
     }
 
     public Action intakePickup() {
