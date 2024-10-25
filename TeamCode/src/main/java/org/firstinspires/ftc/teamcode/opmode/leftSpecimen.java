@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
 
 
 @Autonomous
-public class redLeftBucket extends OpMode{
+public class leftBucket extends OpMode{
     private Follower follower;
     private Timer pathTimer;
     private int pathState;
@@ -28,12 +28,12 @@ public class redLeftBucket extends OpMode{
     private EndEffector endEffector;
 
     // Define key poses
-    private Pose startPosition = new Pose(132.5, 60, Math.toRadians(0));
-    private Pose bucketClear = new Pose(120, 30, Math.toRadians(135));
-    private Pose bucketPos = new Pose(133.8, 15,Math.toRadians(135));
-    private Pose preprePark = new Pose(133,35,Math.toRadians(180));
-    private Pose prePark = new Pose(92,35,Math.toRadians(90));
-    private Pose parkPos = new Pose(85, 38, Math.toRadians(90));
+    private Pose startPosition = new Pose(7.5, 80, Math.toRadians(180));
+    private Pose bucketClear = new Pose(20, 110, Math.toRadians(315));
+    private Pose bucketPos = new Pose(6.2, 125,Math.toRadians(315));
+    private Pose preprePark = new Pose(7,105,Math.toRadians(0));
+    private Pose prePark = new Pose(48,105,Math.toRadians(270));
+    private Pose parkPos = new Pose(55, 102, Math.toRadians(270));
 
 
     private PathChain basketClear, score, park;
@@ -87,11 +87,11 @@ public class redLeftBucket extends OpMode{
                 }
                 break;
             case 4:
-                if (!follower.isBusy()) {
-                    Actions.runBlocking(endEffector.openClaw);
-                    setPathState(5);
-                }
-                break;
+              if (!follower.isBusy()) {
+                  Actions.runBlocking(endEffector.openClaw);
+                  setPathState(5);
+              }
+              break;
             case 5:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(resetArm());
