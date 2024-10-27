@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.Timer;
 
 @Autonomous
-public class blueLeftPark extends OpMode{
+public class leftPark extends OpMode{
     private Follower follower;
     private Timer pathTimer;
     private int pathState;

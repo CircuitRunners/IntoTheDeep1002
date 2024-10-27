@@ -25,7 +25,7 @@ public class Arm {
 
     public DcMotorEx armMotor;
 
-    public RunAction armLowBasket, armIntake, armSpecimen, armObservation, armMax, armSpecimenScore, armClear, armUpright;
+    public RunAction armLowBasket, armIntake, armSpecimen, armObservation, armMax, armSpecimenScore, armClear, armUpright, autoArmPreSpecimen, autoArmSpecimen;
 
     public double armAngle() {
         return (armMotor.getCurrentPosition() - armStart)/TICK_PER_RAD - ARM_OFF;
@@ -48,6 +48,8 @@ public class Arm {
         armSpecimenScore = new RunAction(this::armSpecimenScore);
         armClear = new RunAction(this::armClear);
         armUpright = new RunAction(this::armUpright);
+        autoArmPreSpecimen = new RunAction(this::autoArmPreSpecimen);
+        autoArmSpecimen = new RunAction(this::autoArmSpecimen);
     }
 
     public void update() {
@@ -61,14 +63,13 @@ public class Arm {
         double currentDraw = armMotor.getCurrent(CurrentUnit.AMPS);
 
         // If current exceeds the threshold, don't change the target to prevent damage
-        if (currentDraw > 2 && direction > 0 && !button) {
+        if (currentDraw > 1.5 && direction > 0 && !button) {
             return; // Exit the method to prevent setting a new target
         }
         ARM_TARGET = target;
     }
     public void setArmTarget(double target) {
         double currentDraw = armMotor.getCurrent(CurrentUnit.AMPS);
-
         ARM_TARGET = target;
     }
     public double getArmCurrent() {return armMotor.getCurrent(CurrentUnit.AMPS);}
@@ -97,6 +98,8 @@ public class Arm {
 
     public void armClear() {setArmTarget(ARM_CLEAR);}
     public void armUpright() {setArmTarget(-1.67);}
+    public void autoArmPreSpecimen() {setArmTarget(-0.36);}
+    public void autoArmSpecimen() {setArmTarget(0.2);}
 
     public void resetEncoder() {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

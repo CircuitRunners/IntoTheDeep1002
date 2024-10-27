@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.BezierL
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.Timer;
-import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
 import org.firstinspires.ftc.teamcode.config.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
 import org.firstinspires.ftc.teamcode.config.util.action.Action;
 import org.firstinspires.ftc.teamcode.config.util.action.Actions;
 import org.firstinspires.ftc.teamcode.config.util.action.ParallelAction;
@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
 
 
 @Autonomous
-public class leftBucket extends OpMode{
+public class leftSpecimen extends OpMode{
     private Follower follower;
     private Timer pathTimer;
     private int pathState;
@@ -28,31 +28,31 @@ public class leftBucket extends OpMode{
     private EndEffector endEffector;
 
     // Define key poses
-    private Pose startPosition = new Pose(7.5, 80, Math.toRadians(180));
-    private Pose bucketClear = new Pose(20, 110, Math.toRadians(315));
-    private Pose bucketPos = new Pose(6.2, 125,Math.toRadians(315));
-    private Pose preprePark = new Pose(7,105,Math.toRadians(0));
-    private Pose prePark = new Pose(48,105,Math.toRadians(270));
-    private Pose parkPos = new Pose(55, 102, Math.toRadians(270));
+    private Pose startPosition = new Pose(7.5, 64, Math.toRadians(180));
+    private Pose specimen = new Pose(35, 64, Math.toRadians(180));
+    private Pose specimenScorePos = new Pose(37, 64, Math.toRadians(180));
+    private Pose parkPos = new Pose(10, 64, Math.toRadians(180));
+    private Pose parkPosFinal = new Pose(10, 40, Math.toRadians(180));
 
 
-    private PathChain basketClear, score, park;
+
+    private PathChain specimenPath, parkPath, scorePath, finalParkPath;
     public void buildPaths() {
-        basketClear = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPosition), new Point(bucketClear)))
-                .setConstantHeadingInterpolation(bucketClear.getHeading())
+        specimenPath = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(startPosition), new Point(specimen)))
+                .setConstantHeadingInterpolation(specimen.getHeading())
                 .build();
-        score = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(bucketClear), new Point(bucketPos)))
-                .setConstantHeadingInterpolation(bucketPos.getHeading())
+        scorePath = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimen), new Point(specimenScorePos)))
+                .setConstantHeadingInterpolation(specimenScorePos.getHeading())
                 .build();
-        park = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(bucketPos), new Point(preprePark)))
-                .setConstantHeadingInterpolation(preprePark.getHeading())
-                .addPath(new BezierLine(new Point(preprePark), new Point(prePark)))
-                .setConstantHeadingInterpolation(prePark.getHeading())
-                .addPath(new BezierLine(new Point(prePark), new Point(parkPos)))
+        parkPath = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimen), new Point(parkPos)))
                 .setConstantHeadingInterpolation(parkPos.getHeading())
+                .build();
+        finalParkPath = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(parkPos), new Point(parkPosFinal)))
+                .setConstantHeadingInterpolation(parkPosFinal.getHeading())
                 .build();
     }
 
@@ -65,47 +65,35 @@ public class leftBucket extends OpMode{
                 break;
             case 1:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(endEffector.closeClaw);
-                    follower.followPath(basketClear);
+                    Actions.runBlocking(preSpecimenScore());
+//                    Actions.runBlocking(arm.autoArmPreSpecimen);
+                    follower.followPath(specimenPath);
                     setPathState(2);
                 }
                 break;
             case 2:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(endEffector.closeClaw);
-                    Actions.runBlocking(arm.armLowBasket);
-                    Actions.runBlocking(endEffector.diffyBasket);
-//                    Actions.runBlocking(new SleepAction(1));
-                    setPathState(3);
+                    Actions.runBlocking(new SleepAction(0.5));
+                    Actions.runBlocking(specimenScore());
+//                    Actions.runBlocking(endEffector.openClaw);
+                    follower.followPath(scorePath);
+                    setPathState(5);
                 }
                 break;
             case 3:
-                if (!follower.isBusy()) {
-                    Actions.runBlocking(endEffector.closeClaw);
-                    follower.followPath(score);
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 4) {
+                    Actions.runBlocking(endEffector.openClaw);
+                    Actions.runBlocking(new SleepAction(1));
+                    follower.followPath(parkPath);
                     setPathState(4);
                 }
                 break;
             case 4:
-              if (!follower.isBusy()) {
-                  Actions.runBlocking(endEffector.openClaw);
-                  setPathState(5);
-              }
-              break;
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(new SleepAction(1));
+                    follower.followPath(finalParkPath);
+                }
             case 5:
-                if (!follower.isBusy()) {
-                    Actions.runBlocking(resetArm());
-                    follower.followPath(park);
-                    setPathState(6);
-                }
-                break;
-            case 6:
-                if (!follower.isBusy()) {
-                    Actions.runBlocking(arm.armSpecimenScore);
-                    Actions.runBlocking(new SleepAction(5));
-                    setPathState(7);
-                }
-            case 7:
                 if (!follower.isBusy()) {
                     setPathState(-1);
                 }
@@ -132,6 +120,10 @@ public class leftBucket extends OpMode{
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toRadians(follower.getPose().getHeading()));
+        telemetry.addData("Arm Target", arm.getArmTarget());
+        telemetry.addData("Arm Pos", arm.armAngle());
+        telemetry.addData("Diffy1 Position", "%.2f", endEffector.getDiffy1Position());
+        telemetry.addData("Diffy2 Position", "%.2f", endEffector.getDiffy2Position());
         telemetry.update();
     }
 
@@ -161,6 +153,31 @@ public class leftBucket extends OpMode{
                         arm.armObservation
                 ),
                 arm.armUpright
+        );
+    }
+
+    public Action preSpecimenScore() {
+        return new SequentialAction(
+                //new SleepAction(0.5),
+                endEffector.closeClaw,
+                new ParallelAction(
+                        endEffector.closeClaw,
+                        endEffector.autoPreSpecimen,
+                        arm.autoArmPreSpecimen
+                ),
+                endEffector.closeClaw
+                //new SleepAction(0.5)
+        );
+    }
+
+    public Action specimenScore() {
+        return new SequentialAction(
+                endEffector.closeClaw,
+                // new SleepAction(0.5),
+                endEffector.autoSpecimen,
+                arm.autoArmSpecimen,
+                new SleepAction(1)
+                // new SleepAction(3)
         );
     }
 

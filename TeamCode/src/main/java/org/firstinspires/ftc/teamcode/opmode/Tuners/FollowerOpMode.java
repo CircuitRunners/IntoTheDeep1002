@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.config.pedroPathing.localization.Pose;
 public class FollowerOpMode extends OpMode{
     private Follower follower;
 
-    private Pose startPosition = new Pose(136.5, 64, Math.toRadians(0));
+    private Pose startPosition = new Pose(7.5, 64, Math.toRadians(180));
 
     @Override
     public void loop(){

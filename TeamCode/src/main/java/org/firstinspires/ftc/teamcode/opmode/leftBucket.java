@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
 
 
 @Autonomous
-public class blueLeftBucket extends OpMode{
+public class leftBucket extends OpMode{
     private Follower follower;
     private Timer pathTimer;
     private int pathState;

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.config.subsystems;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.config.util.HWValues;
 
 import org.firstinspires.ftc.teamcode.config.util.action.Action;
@@ -18,7 +18,7 @@ public class EndEffector {
     private final Servo diffy2;
 
     // TODO
-    public RunAction openClaw, closeClaw, diffyIdle, diffyIntakeH, diffyIntakeV, diffyIntakeAL, diffyIntakeAR, diffySpecimen, diffyBasket, diffyObs, diffyHang, diffyClear, diffyScore;
+    public RunAction openClaw, closeClaw, diffyIdle, diffyIntakeH, diffyIntakeV, diffyIntakeAL, diffyIntakeAR, diffySpecimen, diffyBasket, diffyObs, diffyHang, diffyClear, diffyScore, autoPreSpecimen, autoSpecimen;
 
     public EndEffector(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, HWValues.CLAW);
@@ -39,6 +39,8 @@ public class EndEffector {
         diffyHang = new RunAction(this::hangPosition);
         diffyClear = new RunAction(this::intakeClear);
         diffyScore = new RunAction(this::specimenScorePosition);
+        autoPreSpecimen = new RunAction(this::autoPreSpecimen);
+        autoSpecimen = new RunAction(this::autoSpecimen);
 
        // openClaw();
         //idlePosition();
@@ -56,7 +58,7 @@ public class EndEffector {
     }
 
     public void openClaw() {
-        claw.setPosition(0);
+        claw.setPosition(0.4);
     }
 
     public void closeClaw() {
@@ -70,8 +72,8 @@ public class EndEffector {
         }
     }
     public void idlePosition() {
-        diffy1.setPosition(0.30);
-        diffy2.setPosition(0.26);
+        diffy1.setPosition(0.27);
+        diffy2.setPosition(0.18);
     }
 
     public void intakeClear() {
@@ -119,13 +121,24 @@ public class EndEffector {
         diffy2.setPosition(0.5);
     }
 
+    public void autoPreSpecimen() {
+        diffy1.setPosition(0.49);
+        diffy2.setPosition(0.37);
+    }
+
+    public void autoSpecimen() {
+        diffy1.setPosition(0.44);
+        diffy2.setPosition(0.32);
+
+    }
+
     public void diffy1Set(double n){
         diffy1.setPosition(n);
     }
-    public void diffy1increment() {diffy1.setPosition(diffy1.getPosition() + 0.01);}
-    public void diffy2increment() {diffy2.setPosition(diffy2.getPosition() + 0.01);}
-    public void diffy1decrement() {diffy1.setPosition(diffy1.getPosition() - 0.01);}
-    public void diffy2decrement() {diffy2.setPosition(diffy2.getPosition() - 0.01);}
+    public void diffy1increment() {diffy1.setPosition(diffy1.getPosition() + 0.02);}
+    public void diffy2increment() {diffy2.setPosition(diffy2.getPosition() + 0.02);}
+    public void diffy1decrement() {diffy1.setPosition(diffy1.getPosition() - 0.02);}
+    public void diffy2decrement() {diffy2.setPosition(diffy2.getPosition() - 0.02);}
     public void diffy2Set(double n) {
         diffy2.setPosition(n);
     }

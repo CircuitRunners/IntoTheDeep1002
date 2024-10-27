@@ -4,6 +4,8 @@ package org.firstinspires.ftc.teamcode.opmode;
 import org.firstinspires.ftc.teamcode.config.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
 import org.firstinspires.ftc.teamcode.config.subsystems.MecanumDrive;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import org.firstinspires.ftc.teamcode.config.util.RobotConstants;
@@ -153,8 +155,12 @@ public class MainTeleop extends OpMode {
         telemetry.addData("Diffy1 Position", "%.2f", endEffector.getDiffy1Position());
         telemetry.addData("Diffy2 Position", "%.2f", endEffector.getDiffy2Position());
         telemetry.update();
-        telemetry.update();
-        arm.update();
+        if (!gamepad2.circle) {
+            arm.update();
+        } else {
+//            if (arm.armMotor.getCurrent(CurrentUnit.AMPS) < 0.5)
+            arm.armMotor.setPower(0);
+        }
     }
     private void configureOTOS() {
         sparkfunOTOS.setLinearUnit(DistanceUnit.INCH);
