@@ -32,11 +32,14 @@ public class leftSpecimen extends OpMode{
     private Pose specimen = new Pose(35, 64, Math.toRadians(180));
     private Pose specimenScorePos = new Pose(37, 64, Math.toRadians(180));
     private Pose parkPos = new Pose(10, 64, Math.toRadians(180));
-    private Pose parkPosFinal = new Pose(10, 40, Math.toRadians(180));
+    private Pose cycleSpecimen1Pos = new Pose(32, 26, Math.toRadians(180));
+    private Pose cycleSpecimenObs1Pos = new Pose(17, 26, Math.toRadians(0));
+//    private Pose cycleSpecimen2Pos = new Pose(32, y, Math.toRadians(180));
+//    private Pose cycleSpecimenObs2Pos = new Pose(17, y, Math.toRadians(0));55566    private Pose parkPosFinal = new Pose(10, 40, Math.toRadians(180));
 
 
 
-    private PathChain specimenPath, parkPath, scorePath, finalParkPath;
+    private PathChain specimenPath, parkPath, scorePath, finalParkPath, cycleSpecimen1, cycleSpecimenObs1;
     public void buildPaths() {
         specimenPath = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(startPosition), new Point(specimen)))
@@ -50,10 +53,19 @@ public class leftSpecimen extends OpMode{
                 .addPath(new BezierLine(new Point(specimen), new Point(parkPos)))
                 .setConstantHeadingInterpolation(parkPos.getHeading())
                 .build();
-        finalParkPath = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(parkPos), new Point(parkPosFinal)))
-                .setConstantHeadingInterpolation(parkPosFinal.getHeading())
+//        finalParkPath = follower.pathBuilder()
+//                .addPath(new BezierLine(new Point(parkPos), new Point(parkPosFinal)))
+//                .setConstantHeadingInterpolation(parkPosFinal.getHeading())
+//                .build();
+        cycleSpecimen1 = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(parkPos), new Point(cycleSpecimen1Pos)))
+                .setConstantHeadingInterpolation(cycleSpecimen1Pos.getHeading())
                 .build();
+        cycleSpecimenObs1 = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(cycleSpecimen1Pos), new Point(cycleSpecimenObs1Pos)))
+                .setConstantHeadingInterpolation(cycleSpecimenObs1Pos.getHeading())
+                .build();
+
     }
 
     public void autonomousPathUpdate() {
@@ -85,15 +97,33 @@ public class leftSpecimen extends OpMode{
                     Actions.runBlocking(endEffector.openClaw);
                     Actions.runBlocking(new SleepAction(1));
                     follower.followPath(parkPath);
-                    setPathState(4);
+                    setPathState(5);
                 }
                 break;
-            case 4:
-                if (!follower.isBusy()) {
-                    Actions.runBlocking(new SleepAction(1));
-                    follower.followPath(finalParkPath);
-                }
+//            case 4:
+//                if (!follower.isBusy()) {
+//                    Actions.runBlocking(new SleepAction(1));
+//                    follower.followPath(finalParkPath);
+//                    setPathState(5);
+//                }
             case 5:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(arm.armObservation);
+                    Actions.runBlocking(endEffector.diffyIdle);
+                    follower.followPath(cycleSpecimen1);
+                    Actions.runBlocking((endEffector.diffyObs));
+                    setPathState(6);
+                }
+                break;
+            case 6:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(endEffector.closeClaw);
+                    Actions.runBlocking(endEffector.diffyObs);
+                    follower.followPath(cycleSpecimenObs1);
+                    setPathState(7);
+                }
+                break;
+            case 7:
                 if (!follower.isBusy()) {
                     setPathState(-1);
                 }
