@@ -77,11 +77,11 @@ public class leftSpecimen extends OpMode{
                     Actions.runBlocking(specimenScore());
 //                    Actions.runBlocking(endEffector.openClaw);
                     follower.followPath(scorePath);
-                    setPathState(5);
+                    setPathState(3);
                 }
                 break;
             case 3:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 4) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 3) {
                     Actions.runBlocking(endEffector.openClaw);
                     Actions.runBlocking(new SleepAction(1));
                     follower.followPath(parkPath);
@@ -162,7 +162,7 @@ public class leftSpecimen extends OpMode{
                 endEffector.closeClaw,
                 new ParallelAction(
                         endEffector.closeClaw,
-                        endEffector.autoPreSpecimen,
+                      //  endEffector.autoPreSpecimen,
                         arm.autoArmPreSpecimen
                 ),
                 endEffector.closeClaw
