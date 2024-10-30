@@ -73,7 +73,7 @@ public class EndEffector {
     }
     public void idlePosition() {
         diffy1.setPosition(0.27);
-        diffy2.setPosition(0.18);
+        diffy2.setPosition(0.08);
     }
 
     public void intakeClear() {
@@ -113,7 +113,7 @@ public class EndEffector {
     }
     public void obsPosition() {
         diffy1.setPosition(0.45);
-        diffy2.setPosition(0.4);
+        diffy2.setPosition(0.28);
     }
 
     public void hangPosition() {
