@@ -30,12 +30,12 @@ public class leftSpecimen extends OpMode{
     // Define key poses
     private Pose startPosition = new Pose(7.5, 64, Math.toRadians(180));
     private Pose specimen = new Pose(35, 64, Math.toRadians(180));
-    private Pose specimenScorePos = new Pose(37, 64, Math.toRadians(180));
+    private Pose specimenScorePos = new Pose(38, 64, Math.toRadians(180));
     private Pose specimenCycleLineUp = new Pose(30, 64, Math.toRadians(180));
     private Pose parkPos = new Pose(10, 64, Math.toRadians(180));
-    private Pose cycleSpecimen1Pos = new Pose(32, 26, Math.toRadians(180));
+    private Pose cycleSpecimen1Pos = new Pose(27, 26, Math.toRadians(180));
     private Pose cycleSpecimenObs1Pos = new Pose(17, 26, Math.toRadians(0));
-    private Pose cycleSpecimen2Pos = new Pose(32, 20, Math.toRadians(180));
+    private Pose cycleSpecimen2Pos = new Pose(30, 15, Math.toRadians(180));
     private Pose cycleSpecimenObs2Pos = new Pose(17, 20, Math.toRadians(0));
 //    private Pose cycleSpecimen2Pos = new Pose(32, y, Math.toRadians(180));
 //    private Pose cycleSpecimenObs2Pos = new Pose(17, y, Math.toRadians(0));55566    private Pose parkPosFinal = new Pose(10, 40, Math.toRadians(180));
