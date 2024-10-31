@@ -150,6 +150,9 @@ public class leftSpecimen extends OpMode{
                     Actions.runBlocking(endEffector.diffyIdle);
                     follower.followPath(cycleSpecimen2);
                     Actions.runBlocking(endEffector.openClaw);
+                    Actions.runBlocking(endEffector.diffyObs);
+                    Actions.runBlocking(new SleepAction(0.5));
+                    Actions.runBlocking(endEffector.closeClaw);
                     setPathState(7);
                 }
                 break;
