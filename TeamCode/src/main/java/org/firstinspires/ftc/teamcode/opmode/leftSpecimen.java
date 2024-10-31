@@ -35,7 +35,9 @@ public class leftSpecimen extends OpMode{
     private Pose parkPos = new Pose(10, 64, Math.toRadians(180));
     private Pose cycleSpecimen1Pos = new Pose(32, 26, Math.toRadians(180));
     private Pose cycleSpecimenObs1Pos = new Pose(17, 26, Math.toRadians(0));
-    private Pose cycleSpecimen2Pos = new Pose(32, 20, Math.toRadians(180));
+    private Pose cycleSpecimen2Pos = new Pose(30, 16, Math.toRadians(180));
+//    private Pose cycleSpecimen2Pos = new Pose(32, 20, Math.toRadians(180));
+    private Pose cycleSpecimen2Pos = new Pose(30, 15, Math.toRadians(180));
     private Pose cycleSpecimenObs2Pos = new Pose(17, 20, Math.toRadians(0));
 //    private Pose cycleSpecimen2Pos = new Pose(32, y, Math.toRadians(180));
 //    private Pose cycleSpecimenObs2Pos = new Pose(17, y, Math.toRadians(0));55566    private Pose parkPosFinal = new Pose(10, 40, Math.toRadians(180));
