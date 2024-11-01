@@ -39,7 +39,7 @@ public class leftSpecimen extends OpMode{
     private Pose cycleSpecimenObs2Pos = new Pose(17, 20, Math.toRadians(0));
 //    private Pose cycleSpecimen2Pos = new Pose(32, y, Math.toRadians(180));
 //    private Pose cycleSpecimenObs2Pos = new Pose(17, y, Math.toRadians(0));55566    private Pose parkPosFinal = new Pose(10, 40, Math.toRadians(180));
-
+//pushing
 
 
     private PathChain specimenPath, parkPath, scorePath, finalParkPath, cycleSpecimen1, cycleSpecimenObs1, cycleSpecimen2, cycleSpecimenObs2, specimenCycleLineUpPath;
