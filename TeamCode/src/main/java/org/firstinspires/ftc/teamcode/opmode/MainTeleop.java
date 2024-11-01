@@ -117,13 +117,8 @@ public class MainTeleop extends OpMode {
         }
 
         if (gamepad2.dpad_right) {
-            if (arm.getArmTarget() != ARM_SPECIMEN) {
-                arm.setArmTarget(ARM_SPECIMEN);
-                endEffector.specimenPosition();
-            } else {
-                arm.setArmTarget(ARM_SPECIMEN_SCORE);
-                endEffector.specimenScorePosition();
-            }
+            arm.setArmTarget(ARM_SPECIMEN_SCORE);
+            endEffector.specimenScorePosition();
 
         }
         if (gamepad2.dpad_left) {

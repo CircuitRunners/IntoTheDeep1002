@@ -31,7 +31,7 @@ public class leftSpecimen extends OpMode{
     // Define key poses
     private Pose startPosition = new Pose(7.5, 64, Math.toRadians(180));
     private Pose specimen = new Pose(35, 64, Math.toRadians(180));
-    private Pose specimenScorePos = new Pose(37, 64, Math.toRadians(180));
+    private Pose specimenScorePos = new Pose(38, 64, Math.toRadians(180));
     private Pose specimenCycleLineUp = new Pose(30, 64, Math.toRadians(180));
     private Pose parkPos = new Pose(10, 64, Math.toRadians(180));
     private Pose cycleSpecimen1Pos = new Pose(32, 26, Math.toRadians(180));
@@ -70,7 +70,7 @@ public class leftSpecimen extends OpMode{
 //                .setConstantHeadingInterpolation(parkPosFinal.getHeading())
 //                .build();
         cycleSpecimen1 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(specimenScorePos), new Point(cycleSpecimen1Pos)))
+                .addPath(new BezierCurve(new Point(specimenScorePos), new Point(cycleSpecimen1Pos)))
                 .setConstantHeadingInterpolation(cycleSpecimen1Pos.getHeading())
                 .build();
         cycleSpecimenObs1 = follower.pathBuilder()
