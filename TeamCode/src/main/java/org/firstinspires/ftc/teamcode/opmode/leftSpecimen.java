@@ -70,7 +70,7 @@ public class leftSpecimen extends OpMode{
 //                .setConstantHeadingInterpolation(parkPosFinal.getHeading())
 //                .build();
         cycleSpecimen1 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(specimenScorePos), new Point(cycleSpecimen1Pos)))
+                .addPath(new BezierLine(new Point(specimenCycleLineUp), new Point(cycleSpecimen1Pos)))
                 .setConstantHeadingInterpolation(cycleSpecimen1Pos.getHeading())
                 .build();
         cycleSpecimenObs1 = follower.pathBuilder()
