@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.localization.Pose;
+import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Point;
@@ -36,15 +37,18 @@ public class leftSpecimen extends OpMode{
     private Pose cycleSpecimen1Pos = new Pose(32, 26, Math.toRadians(180));
     private Pose cycleSpecimenObs1Pos = new Pose(17, 26, Math.toRadians(0));
     private Pose cycleSpecimen2Pos = new Pose(30, 16, Math.toRadians(180));
-//    private Pose cycleSpecimen2Pos = new Pose(32, 20, Math.toRadians(180));
-    private Pose cycleSpecimen2Pos = new Pose(30, 15, Math.toRadians(180));
-    private Pose cycleSpecimenObs2Pos = new Pose(17, 20, Math.toRadians(0));
+    private Pose cycleSpecimenObs2Pos = new Pose(17, 15, Math.toRadians(0));
+    private Pose grabSpecimen1 = new Pose(17, 24, Math.toRadians(0));
+    private Pose specimenPos2 = new Pose(35, 65, Math.toRadians(180));
+    private Pose specimenScorePos2 = new Pose(37, 65, Math.toRadians(180));
+    private Pose specimenPos3 = new Pose(35, 66, Math.toRadians(180));
+    private Pose specimenScorePos3 = new Pose(37, 66, Math.toRadians(180));
 //    private Pose cycleSpecimen2Pos = new Pose(32, y, Math.toRadians(180));
 //    private Pose cycleSpecimenObs2Pos = new Pose(17, y, Math.toRadians(0));55566    private Pose parkPosFinal = new Pose(10, 40, Math.toRadians(180));
 
 
 
-    private PathChain specimenPath, parkPath, scorePath, finalParkPath, cycleSpecimen1, cycleSpecimenObs1, cycleSpecimen2, cycleSpecimenObs2, specimenCycleLineUpPath;
+    private PathChain specimenPath, parkPath, scorePath, finalParkPath, cycleSpecimen1, cycleSpecimenObs1, cycleSpecimen2, cycleSpecimenObs2, specimenCycleLineUpPath, grabSpecimen1Path, specimenPos2Path, specimenScorePos2Path, grabSpecimen2Path, specimenPos3Path, specimenScorePos3Path;
     public void buildPaths() {
         specimenPath = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(startPosition), new Point(specimen)))
@@ -59,7 +63,7 @@ public class leftSpecimen extends OpMode{
 //                .setConstantHeadingInterpolation(parkPos.getHeading())
 //                .build();
 //        finalParkPath = follower.pathBuilder()
-//                .addPath(new BezierLine(new Point(parkPos), new Point(parkPosFinal)))
+//
 //                .setConstantHeadingInterpolation(parkPosFinal.getHeading())
 //                .build();
         cycleSpecimen1 = follower.pathBuilder()
@@ -82,6 +86,31 @@ public class leftSpecimen extends OpMode{
                 .addPath(new BezierLine(new Point(specimenScorePos), new Point(specimenCycleLineUp)))
                 .setConstantHeadingInterpolation(specimenCycleLineUp.getHeading())
                 .build();
+        grabSpecimen1Path = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(cycleSpecimenObs2Pos), new Point(grabSpecimen1)))
+                .setConstantHeadingInterpolation(grabSpecimen1.getHeading())
+                .build();
+        specimenPos2Path = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(grabSpecimen1), new Point(specimenPos2)))
+                .setConstantHeadingInterpolation(specimenPos2.getHeading())
+                .build();
+        specimenScorePos2Path = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimenPos2), new Point(specimenScorePos2)))
+                .setConstantHeadingInterpolation(specimenScorePos2.getHeading())
+                .build();
+        grabSpecimen2Path = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimenScorePos2), new Point(grabSpecimen1)))
+                .setConstantHeadingInterpolation(grabSpecimen1.getHeading())
+                .build();
+        specimenPos3Path = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(grabSpecimen1), new Point(specimenPos3)))
+                .setConstantHeadingInterpolation(specimenPos3.getHeading())
+                .build();
+        specimenScorePos3Path = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimenPos3), new Point(specimenScorePos3)))
+                .setConstantHeadingInterpolation(specimenScorePos3.getHeading())
+                .build();
+
 
 
 
@@ -162,11 +191,38 @@ public class leftSpecimen extends OpMode{
                 break;
             case 8:
                 if (!follower.isBusy()) {
-
+                    follower.followPath(cycleSpecimenObs2);
+                    Actions.runBlocking(endEffector.openClaw);
+                    Actions.runBlocking(endEffector.diffyIdle);
                     setPathState(9);
                 }
                 break;
             case 9:
+                if (!follower.isBusy()) {
+                    follower.followPath(grabSpecimen1Path);
+                    Actions.runBlocking(endEffector.diffyObs);
+                    Actions.runBlocking(endEffector.closeClaw);
+                    setPathState(10);
+                }
+                break;
+            case 10:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(preSpecimenScore());
+//                    Actions.runBlocking(arm.autoArmPreSpecimen);
+                    follower.followPath(specimenPos2Path);
+                    setPathState(11);
+                }
+                break;
+            case 11:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(new SleepAction(0.5));
+                    Actions.runBlocking(specimenScore());
+//                    Actions.runBlocking(endEffector.openClaw);
+                    follower.followPath(specimenScorePos2Path);
+                    setPathState(12);
+                }
+                break;
+            case 12:
                 if (!follower.isBusy()) {
                     setPathState(-1);
                 }
