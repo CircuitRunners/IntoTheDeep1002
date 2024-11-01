@@ -153,7 +153,7 @@ public class MainTeleop extends OpMode {
         if (!gamepad2.circle) {
             arm.update();
         } else {
-//            if (arm.armMotor.getCurrent(CurrentUnit.AMPS) < 0.5)
+//            if (!(arm.armMotor.getCurrent(CurrentUnit.AMPS) > 2))
             arm.armMotor.setPower(0);
         }
     }

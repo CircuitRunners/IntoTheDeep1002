@@ -104,8 +104,8 @@ public class EndEffector {
     }
 
     public void specimenScorePosition() {
-        diffy1.setPosition(0.43);
-        diffy2.setPosition(0.26);
+        diffy1.setPosition(0.83);
+        diffy2.setPosition(0.66);
     }
     public void basketPosition() {
         diffy1.setPosition(0.53);
@@ -127,8 +127,8 @@ public class EndEffector {
     }
 
     public void autoSpecimen() {
-        diffy1.setPosition(0.44);
-        diffy2.setPosition(0.32);
+        diffy1.setPosition(0.47);
+        diffy2.setPosition(0.3);
 
     }
 
