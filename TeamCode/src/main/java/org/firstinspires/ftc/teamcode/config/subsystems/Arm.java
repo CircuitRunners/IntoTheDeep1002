@@ -101,7 +101,7 @@ public class Arm {
 
     public void armClear() {setArmTarget(ARM_CLEAR);}
     public void armUpright() {setArmTarget(-1.67);}
-    public void autoArmPreSpecimen() {setArmTarget(-0.36);}
+    public void autoArmPreSpecimen() {setArmTarget(0);}
     public void autoArmSpecimen() {setArmTarget(0.13);}
 
     public void resetEncoder() {
