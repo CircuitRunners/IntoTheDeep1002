@@ -57,6 +57,12 @@ public class MecanumDrive {
         double backLeftPower = forward - right + rotate;
         double backRightPower = forward + right - rotate;
 
+        // where dx & dy are the components of the rotation
+//        double frontLeftPower = forward + right + rotate * (dx + dy);
+//        double frontRightPower = forward - right - rotate * (dx - dy);
+//        double backLeftPower = forward - right + rotate * (dx - dy);
+//        double backRightPower = forward + right - rotate * (dx + dy);
+
         setPowers(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
     }
 }

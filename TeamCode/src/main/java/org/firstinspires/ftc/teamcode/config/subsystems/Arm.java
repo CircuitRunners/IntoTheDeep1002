@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.CustomPIDFCoefficients;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.FeedForwardConstant;
@@ -24,8 +25,9 @@ public class Arm {
     }
 
     public DcMotorEx armMotor;
+    // public AnalogInput enc;
 
-    public RunAction armLowBasket, armIntake, armSpecimen, armObservation, armMax, armSpecimenScore, armClear, armUpright, autoArmPreSpecimen, autoArmSpecimen;
+    public RunAction armLowBasket,armIntake,armSpecimen, armObservation, armMax, armSpecimenScore, armClear, armUpright, autoArmPreSpecimen, autoArmSpecimen;
 
     public double armAngle() {
         return (armMotor.getCurrentPosition() - armStart)/TICK_PER_RAD - ARM_OFF;
@@ -35,6 +37,7 @@ public class Arm {
 
     public Arm(HardwareMap hardwareMap) {
         armMotor = hardwareMap.get(DcMotorEx.class, "arm");
+        // enc = hardwareMap.get(AnalogInput.class, "enc");
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armStart = armMotor.getCurrentPosition();
@@ -98,14 +101,20 @@ public class Arm {
 
     public void armClear() {setArmTarget(ARM_CLEAR);}
     public void armUpright() {setArmTarget(-1.67);}
-    public void autoArmPreSpecimen() {setArmTarget(-0.36);}
-    public void autoArmSpecimen() {setArmTarget(0.2);}
+    public void autoArmPreSpecimen() {setArmTarget(0);}
+    public void autoArmSpecimen() {setArmTarget(0.13);}
 
     public void resetEncoder() {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armStart = armMotor.getCurrentPosition();
         ARM_TARGET = armAngle();
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void scoreSpecimen() {
+        while (armMotor.getCurrent(CurrentUnit.AMPS) < 2) {
+            armMotor.setPower(-1);
+        }
     }
 
 

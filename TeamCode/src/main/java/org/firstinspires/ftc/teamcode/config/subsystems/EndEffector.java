@@ -72,8 +72,8 @@ public class EndEffector {
         }
     }
     public void idlePosition() {
-        diffy1.setPosition(0.27);
-        diffy2.setPosition(0.08);
+        diffy1.setPosition(0.41);
+        diffy2.setPosition(0.24);
     }
 
     public void intakeClear() {
@@ -104,8 +104,8 @@ public class EndEffector {
     }
 
     public void specimenScorePosition() {
-        diffy1.setPosition(0.57);
-        diffy2.setPosition(0.56);
+        diffy1.setPosition(0.83);
+        diffy2.setPosition(0.66);
     }
     public void basketPosition() {
         diffy1.setPosition(0.53);
@@ -127,8 +127,8 @@ public class EndEffector {
     }
 
     public void autoSpecimen() {
-        diffy1.setPosition(0.44);
-        diffy2.setPosition(0.32);
+        diffy1.setPosition(0.39);
+        diffy2.setPosition(0.22);
 
     }
 

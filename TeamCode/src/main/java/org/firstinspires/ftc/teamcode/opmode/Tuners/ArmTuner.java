@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.firstinspires.ftc.teamcode.config.util.RobotConstants;
 
@@ -16,9 +17,9 @@ public class ArmTuner extends OpMode {
     public static double kP = 0.1, kI = 0, kD = 0.0002;
     public static double f = 0.00;
     public static int target = 0;
-
-    private final double ticks_in_degree = 19.7924893140647;
     private DcMotorEx arm_motor;
+    private AnalogInput encoder;
+    private double offset = 0;
 
 
 
@@ -28,14 +29,15 @@ public class ArmTuner extends OpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         arm_motor = hardwareMap.get(DcMotorEx.class, "arm");
+        encoder = hardwareMap.get(AnalogInput.class, "encoder");
     }
 
     @Override
     public void loop() {
         controller.setPID(kP, kI, kD);
-        int armPos = arm_motor.getCurrentPosition();
+        double armPos = (encoder.getVoltage() / 3.2 * 360 + offset) % 36;
         double pid = controller.calculate(armPos, target);
-        double ff = Math.sin(Math.toRadians(target / ticks_in_degree)) * f;
+        double ff = Math.sin(Math.toRadians(target)) * f;
 
         double power = pid + ff;
 
