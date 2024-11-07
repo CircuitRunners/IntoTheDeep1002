@@ -121,15 +121,20 @@ public class EndEffector {
         diffy2.setPosition(0.5);
     }
 
-    public void autoPreSpecimen() {
-        diffy1.setPosition(0.49);
-        diffy2.setPosition(0.37);
-    }
+//    public void autoPreSpecimen() {
+//        diffy1.setPosition(0.49);
+//        diffy2.setPosition(0.37);
+//    }
 
     public void autoSpecimen() {
         diffy1.setPosition(0.39);
         diffy2.setPosition(0.22);
 
+    }
+
+    public void autoPreSpecimen(){
+        diffy1.setPosition(0.49);
+        diffy2.setPosition(0.32);
     }
 
     public void diffy1Set(double n){

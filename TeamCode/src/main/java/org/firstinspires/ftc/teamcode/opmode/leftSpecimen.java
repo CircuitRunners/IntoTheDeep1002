@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.localization.Pose;
-import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Point;
@@ -32,14 +31,18 @@ public class leftSpecimen extends OpMode{
     private Pose startPosition = new Pose(7.5, 64, Math.toRadians(180));
     // private Pose specimen = new Pose(35, 64, Math.toRadians(180));
     private Pose specimenScorePos = new Pose(42.5, 68, Math.toRadians(180));
-    private Pose specimenCycleLineUp = new Pose(30, 64, Math.toRadians(180));
+    private Pose specimenCycleLineUp = new Pose(20, 68, Math.toRadians(180));
     private Pose parkPos = new Pose(10, 64, Math.toRadians(180));
-    private Pose cycleSpecimen1Pos = new Pose(32, 26, Math.toRadians(180));
-    private Pose cycleSpecimenObs1Pos = new Pose(17, 26, Math.toRadians(0));
-    private Pose cycleSpecimen2Pos = new Pose(30, 16, Math.toRadians(180));
+    private Pose cycleSpecimen1LineupPos = new Pose(20, 39.8, Math.toRadians(180));
+    private Pose cycleSpecimen1IntakePos = new Pose(59, 39.8, Math.toRadians(180));
+    private Pose cycleSPecimenBehindPos = new Pose(59,23, Math.toRadians(180));
+    private Pose cycleSpecimen2BehindPos = new Pose(59,6.2, Math.toRadians(180));
+    private Pose cycleSpecimenObs1Pos = new Pose(13, 23, Math.toRadians(180));
+    private Pose backUpFromObsPos= new Pose(18, 9, Math.toRadians(180));
+    private Pose specimen3BehindPos = new Pose(59, 2.5, Math.toRadians(180));
     private Pose cycleSpecimen3Pos = new Pose(60, 9, Math.toRadians(180));
-    private Pose cycleSpecimenObs3Pos = new Pose(17, 9, Math.toRadians(180));
-    private Pose cycleSpecimenObs2Pos = new Pose(17, 15, Math.toRadians(0));
+    private Pose cycleSpecimenObs3Pos = new Pose(13, 9, Math.toRadians(180));
+    private Pose cycleSpecimenObs2Pos = new Pose(13, 9, Math.toRadians(180));
     private Pose lineUpGrabSpecimen = new Pose(20, 24, Math.toRadians(0));
     private Pose grabSpecimen1 = new Pose(17, 24, Math.toRadians(0));
     private Pose specimenPos2 = new Pose(35, 65, Math.toRadians(180));
@@ -51,7 +54,7 @@ public class leftSpecimen extends OpMode{
 //pushing
 
 
-    private PathChain specimenPath, parkPath, scorePath, finalParkPath, cycleSpecimen1, cycleSpecimenObs1, cycleSpecimen2, cycleSpecimenObs2, specimenCycleLineUpPath, grabSpecimen1Path, specimenPos2Path, specimenScorePos2Path, grabSpecimen2Path, specimenPos3Path, specimenScorePos3Path, lineUpGrabSpecimenPath, specimenCycleLineUpPath2, cycleSpecimen3Path, cycleSpecimenObs3Path;
+    private PathChain specimenPath, lineUpGrabSPecimen3,cycleSpecimen3Behind, parkPath,lineUpGrabSpecimen1, scorePath,backUpFromObs, lineUpScoreSpecimen1, scoreSpecimen1, specimen1Behind,finalParkPath, cycleSpecimen1Lineup,cycleSpecimen1, cycleSpecimenObs1, cycleSpecimen2,cycleSpecimen2Behind, cycleSpecimenObs2, specimenCycleLineUpPath, grabSpecimen1Path, specimenPos2Path, specimenScorePos2Path, grabSpecimen2Path, specimenPos3Path, specimenScorePos3Path, lineUpGrabSpecimenPath, specimenCycleLineUpPath2, cycleSpecimen3Path, cycleSpecimenObs3Path;
     public void buildPaths() {
 //        specimenPath = follower.pathBuilder()
 //                .addPath(new BezierLine(new Point(startPosition), new Point(specimen)))
@@ -61,37 +64,70 @@ public class leftSpecimen extends OpMode{
                 .addPath(new BezierLine(new Point(startPosition), new Point(specimenScorePos)))
                 .setConstantHeadingInterpolation(specimenScorePos.getHeading())
                 .build();
-//        parkPath = follower.pathBuilder()
-//                .addPath(new BezierLine(new Point(specimen), new Point(parkPos)))
-//                .setConstantHeadingInterpolation(parkPos.getHeading())
-//                .build();
+        parkPath = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimenCycleLineUp), new Point(parkPos)))
+                .setConstantHeadingInterpolation(parkPos.getHeading())
+                .build();
 //        finalParkPath = follower.pathBuilder()
 //
 //                .setConstantHeadingInterpolation(parkPosFinal.getHeading())
 //                .build();
+        cycleSpecimen1Lineup = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimenCycleLineUp), new Point(cycleSpecimen1LineupPos)))
+                .setConstantHeadingInterpolation(cycleSpecimen1LineupPos.getHeading())
+                .build();
         cycleSpecimen1 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(specimenCycleLineUp), new Point(cycleSpecimen1Pos)))
-                .setConstantHeadingInterpolation(cycleSpecimen1Pos.getHeading())
+                .addPath(new BezierLine(new Point(cycleSpecimen1LineupPos), new Point(cycleSpecimen1IntakePos)))
+                .setConstantHeadingInterpolation(cycleSpecimen1IntakePos.getHeading())
+                .build();
+        specimen1Behind = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(cycleSpecimen1IntakePos), new Point(cycleSPecimenBehindPos)))
+                .setConstantHeadingInterpolation(cycleSPecimenBehindPos.getHeading())
                 .build();
         cycleSpecimenObs1 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(cycleSpecimen1Pos), new Point(cycleSpecimenObs1Pos)))
+                .addPath(new BezierLine(new Point(cycleSPecimenBehindPos), new Point(cycleSpecimenObs1Pos)))
                 .setConstantHeadingInterpolation(cycleSpecimenObs1Pos.getHeading())
                 .build();
         cycleSpecimen2 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(cycleSpecimenObs1Pos), new Point(cycleSpecimen2Pos)))
-                .setConstantHeadingInterpolation(cycleSpecimen2Pos.getHeading())
+                .addPath(new BezierLine(new Point(cycleSpecimenObs1Pos), new Point(cycleSPecimenBehindPos)))
+                .setConstantHeadingInterpolation(cycleSPecimenBehindPos.getHeading())
                 .build();
+        cycleSpecimen2Behind = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(cycleSPecimenBehindPos), new Point(cycleSpecimen2BehindPos)))
+                .setConstantHeadingInterpolation(cycleSpecimen2BehindPos.getHeading())
+                .build();
+        cycleSpecimen3Behind = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(cycleSpecimen1IntakePos), new Point(specimen3BehindPos)))
+                .setConstantHeadingInterpolation(cycleSpecimen2BehindPos.getHeading())
+                .build();
+
         cycleSpecimenObs2 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(cycleSpecimen2Pos), new Point(cycleSpecimenObs2Pos)))
+                .addPath(new BezierLine(new Point(cycleSpecimen2BehindPos), new Point(cycleSpecimenObs2Pos)))
                 .setConstantHeadingInterpolation(cycleSpecimenObs2Pos.getHeading())
+                .build();
+        backUpFromObs = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(cycleSpecimenObs2Pos), new Point(backUpFromObsPos)))
+                .setConstantHeadingInterpolation(backUpFromObsPos.getHeading())
+                .build();
+        lineUpGrabSpecimen1 = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(backUpFromObsPos), new Point(lineUpGrabSpecimen)))
+                .setConstantHeadingInterpolation(lineUpGrabSpecimen.getHeading())
                 .build();
         specimenCycleLineUpPath = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(specimenScorePos), new Point(specimenCycleLineUp)))
                 .setConstantHeadingInterpolation(specimenCycleLineUp.getHeading())
                 .build();
         grabSpecimen1Path = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(cycleSpecimenObs2Pos), new Point(grabSpecimen1)))
+                .addPath(new BezierLine(new Point(lineUpGrabSpecimen), new Point(grabSpecimen1)))
                 .setConstantHeadingInterpolation(grabSpecimen1.getHeading())
+                .build();
+        lineUpScoreSpecimen1 = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(grabSpecimen1), new Point(specimenCycleLineUp)))
+                .setConstantHeadingInterpolation(specimenCycleLineUp.getHeading())
+                .build();
+        scoreSpecimen1 = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimenCycleLineUp), new Point(specimenScorePos)))
+                .setConstantHeadingInterpolation(specimenScorePos.getHeading())
                 .build();
         specimenPos2Path = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(grabSpecimen1), new Point(specimenPos2)))
@@ -126,8 +162,12 @@ public class leftSpecimen extends OpMode{
                 .setConstantHeadingInterpolation(cycleSpecimen3Pos.getHeading())
                 .build();
         cycleSpecimenObs3Path = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(cycleSpecimen3Pos), new Point(cycleSpecimenObs3Pos)))
-                .setConstantHeadingInterpolation(cycleSpecimenObs2Pos.getHeading())
+                .addPath(new BezierLine(new Point(specimen3BehindPos), new Point(cycleSpecimenObs3Pos)))
+                .setConstantHeadingInterpolation(cycleSpecimenObs3Pos.getHeading())
+                .build();
+        lineUpGrabSPecimen3 = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(specimenCycleLineUp), new Point(lineUpGrabSpecimen)))
+                .setConstantHeadingInterpolation(grabSpecimen1.getHeading())
                 .build();
 
 
@@ -155,6 +195,7 @@ public class leftSpecimen extends OpMode{
             case 2:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(endEffector.closeClaw);
+                    Actions.runBlocking(endEffector.autoPreSpecimen);
                     Actions.runBlocking(arm.autoArmPreSpecimen);
                     Actions.runBlocking(new SleepAction(1));
                     //Actions.runBlocking(specimenScore());
@@ -182,8 +223,8 @@ public class leftSpecimen extends OpMode{
                 if (!follower.isBusy()) {
                     Actions.runBlocking(arm.armMax);
                     Actions.runBlocking(endEffector.diffyIdle);
-                    follower.followPath(cycleSpecimen1);
-
+                    follower.followPath(cycleSpecimen1Lineup);
+                    Actions.runBlocking(new SleepAction(1.5));
                     setPathState(6);
                 }
                 break;
@@ -191,106 +232,276 @@ public class leftSpecimen extends OpMode{
                 if (!follower.isBusy()) {
                     Actions.runBlocking(endEffector.diffyObs);
                     Actions.runBlocking(new SleepAction(0.5));
-                    Actions.runBlocking(endEffector.closeClaw);
+                    follower.followPath(cycleSpecimen1);
                     Actions.runBlocking(new SleepAction(0.5));
-                    Actions.runBlocking(endEffector.diffyClear);
-                    Actions.runBlocking(endEffector.closeClaw);
-                    follower.followPath(cycleSpecimenObs1);
                     setPathState(7);
                 }
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(endEffector.openClaw);
-                    Actions.runBlocking(endEffector.diffyIdle);
-                    follower.followPath(cycleSpecimen2);
-                    Actions.runBlocking(endEffector.openClaw);
-                    Actions.runBlocking(endEffector.diffyObs);
+                    follower.followPath(specimen1Behind);
                     Actions.runBlocking(new SleepAction(0.5));
                     Actions.runBlocking(endEffector.closeClaw);
-                    Actions.runBlocking(endEffector.diffyIdle);
-                    setPathState(9);
+                    Actions.runBlocking(new SleepAction(0.5));
+//                    Actions.runBlocking(endEffector.diffyClear);
+//                    Actions.runBlocking(endEffector.closeClaw);
+
+//                    Actions.runBlocking(endEffector.openClaw);
+//                //    Actions.runBlocking(endEffector.diffyIdle);
+//                    follower.followPath(cycleSpecimen2);
+//                    Actions.runBlocking(endEffector.openClaw);
+//                //    Actions.runBlocking(endEffector.diffyObs);
+//                    Actions.runBlocking(new SleepAction(1.5));
+//                //    Actions.runBlocking(endEffector.closeClaw);
+//               //     Actions.runBlocking(endEffector.diffyIdle);
+                    setPathState(8);
                 }
                 break;
             case 8:
                 if (!follower.isBusy()) {
-                    follower.followPath(cycleSpecimenObs2);
-                    Actions.runBlocking(endEffector.openClaw);
-                    Actions.runBlocking(endEffector.diffyIdle);
-                    follower.followPath(lineUpGrabSpecimenPath);
-                    Actions.runBlocking(new SleepAction(1));
+                    follower.followPath(cycleSpecimenObs1);
+//                    follower.followPath(cycleSpecimenObs2);
+//                    Actions.runBlocking(endEffector.openClaw);
+//                    Actions.runBlocking(endEffector.diffyIdle);
+//                    follower.followPath(lineUpGrabSpecimenPath);
+//                    Actions.runBlocking(new SleepAction(1));
                     setPathState(9);
                 }
                 break;
             case 9:
                 if (!follower.isBusy()) {
-                    follower.followPath(grabSpecimen1Path);
-                    Actions.runBlocking(endEffector.diffyObs);
-                    Actions.runBlocking(endEffector.closeClaw);
+//                    Actions.runBlocking(endEffector.openClaw);
+//                    follower.followPath(grabSpecimen1Path);
+//                    Actions.runBlocking(endEffector.diffyObs);
+//                    Actions.runBlocking(endEffector.closeClaw);
+                    follower.followPath(cycleSpecimen2);
                     setPathState(10);
                 }
                 break;
             case 10:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(preSpecimenScore());
-//                    Actions.runBlocking(arm.autoArmPreSpecimen);
-                    follower.followPath(specimenPos2Path);
+//                    Actions.runBlocking(preSpecimenScore());
+////                    Actions.runBlocking(arm.autoArmPreSpecimen);
+//                    follower.followPath(specimenPos2Path);
+                    follower.followPath(cycleSpecimen2Behind);
                     setPathState(11);
                 }
                 break;
             case 11:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(new SleepAction(0.5));
-                    Actions.runBlocking(specimenScore());
-//                    Actions.runBlocking(endEffector.openClaw);
-                    follower.followPath(specimenScorePos2Path);
+//                    Actions.runBlocking(new SleepAction(0.5));
+//                    Actions.runBlocking(specimenScore());
+////                    Actions.runBlocking(endEffector.openClaw);
+//                    follower.followPath(specimenScorePos2Path);
+                    follower.followPath(cycleSpecimenObs2);
                     setPathState(12);
                 }
                 break;
             case 12:
                 if (!follower.isBusy()){
-                follower.followPath(specimenCycleLineUpPath2);
-                follower.followPath(cycleSpecimen3Path);
-                follower.followPath(cycleSpecimenObs3Path);
+                follower.followPath(backUpFromObs);
+//                follower.followPath(cycleSpecimen3Path);
+//                follower.followPath(cycleSpecimenObs3Path);
                 setPathState(13);
                 }
                 break;
             case 13:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(endEffector.diffyIdle);
+                    Actions.runBlocking(endEffector.diffyObs);
                     Actions.runBlocking(endEffector.openClaw);
-                    follower.followPath(grabSpecimen2Path);
+                    Actions.runBlocking(new SleepAction(1.5));
+                    follower.followPath(lineUpGrabSpecimen1);
                     setPathState(14);
                 }
                 break;
             case 14:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(endEffector.diffyObs);
-                    Actions.runBlocking(endEffector.closeClaw);
-                    Actions.runBlocking(endEffector.diffyIdle);
-                    follower.followPath(specimenPos3Path);
-                    setPathState(14);
+                    follower.followPath(grabSpecimen1Path);
+                    setPathState(15);
                 }
                 break;
             case 15:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(endEffector.closeClaw);
-                    Actions.runBlocking(preSpecimenScore());
-//                    Actions.runBlocking(arm.autoArmPreSpecimen);
-                    follower.followPath(specimenPos3Path);
-                    setPathState(14);
+                    Actions.runBlocking(endEffector.diffyIdle);
+                    Actions.runBlocking(new SleepAction(1.5));
+//                    Actions.runBlocking(preSpecimenScore());
+////                    Actions.runBlocking(arm.autoArmPreSpecimen);
+                    follower.followPath(lineUpScoreSpecimen1);
+                    setPathState(16);
                 }
                 break;
             case 16:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(new SleepAction(0.5));
-                    Actions.runBlocking(specimenScore());
+                    Actions.runBlocking(endEffector.closeClaw);
+                    Actions.runBlocking(endEffector.autoPreSpecimen);
+                    Actions.runBlocking(arm.autoArmPreSpecimen);
+                    Actions.runBlocking(new SleepAction(1));
 //                    Actions.runBlocking(endEffector.openClaw);
-                    follower.followPath(specimenScorePos3Path);
-                    setPathState(15);
+                    follower.followPath(scorePath);
+                    setPathState(17);
                 }
                 break;
             case 17:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(new SleepAction(2.5));
+                    Actions.runBlocking(endEffector.openClaw);
+                    Actions.runBlocking(new SleepAction(0.5));
+                    follower.followPath(specimenCycleLineUpPath);
+                    setPathState(33);
+                }
+                break;
+
+            case 18:
+                if (!follower.isBusy()) {
+                Actions.runBlocking(arm.armMax);
+                Actions.runBlocking(endEffector.diffyIdle);
+                follower.followPath(cycleSpecimen1Lineup);
+                Actions.runBlocking(new SleepAction(1.5));
+                setPathState(19);
+            }
+                break;
+            case 19:
+                if (!follower.isBusy()) {
+                    follower.followPath(cycleSpecimen1);
+                    Actions.runBlocking(new SleepAction(0.5));
+                    setPathState(20);
+                }
+                break;
+            case 20:
+                if (!follower.isBusy()) {
+                    follower.followPath(cycleSpecimen3Behind);
+                    setPathState(21);
+                }
+                break;
+            case 21:
+                if (!follower.isBusy()) {
+                    follower.followPath(cycleSpecimenObs3Path);
+                    setPathState(22);
+                }
+                break;
+            case 22:
+                if (!follower.isBusy()){
+                    follower.followPath(backUpFromObs);
+//                follower.followPath(cycleSpecimen3Path);
+//                follower.followPath(cycleSpecimenObs3Path);
+                    setPathState(23);
+                    }
+                break;
+                case 23:
+                    if (!follower.isBusy()) {
+                        Actions.runBlocking(endEffector.diffyObs);
+                        Actions.runBlocking(endEffector.openClaw);
+                        Actions.runBlocking(new SleepAction(1.5));
+                        follower.followPath(lineUpGrabSpecimen1);
+                        setPathState(24);
+                        }
+                    break;
+                    case 24:
+                        if (!follower.isBusy()) {
+                            follower.followPath(grabSpecimen1Path);
+                            setPathState(25);
+                        }
+                        break;
+            case 25:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(endEffector.closeClaw);
+                    Actions.runBlocking(new SleepAction(0.5));
+                    Actions.runBlocking(endEffector.diffyIdle);
+//                    Actions.runBlocking(preSpecimenScore());
+////                    Actions.runBlocking(arm.autoArmPreSpecimen);
+                    follower.followPath(lineUpScoreSpecimen1);
+                    setPathState(26);
+                }
+                break;
+            case 26:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(new SleepAction(0.5));
+                    Actions.runBlocking(endEffector.closeClaw);
+                    Actions.runBlocking(endEffector.autoPreSpecimen);
+                    Actions.runBlocking(arm.autoArmPreSpecimen);
+                    Actions.runBlocking(new SleepAction(1));
+//                    Actions.runBlocking(endEffector.openClaw);
+                    follower.followPath(scorePath);
+                    setPathState(27);
+                }
+                break;
+            case 27:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(new SleepAction(2.5));
+                    Actions.runBlocking(endEffector.openClaw);
+                    Actions.runBlocking(new SleepAction(0.5));
+                    follower.followPath(specimenCycleLineUpPath);
+                    setPathState(28);
+                }
+                break;
+            case 28:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(arm.armMax);
+                    Actions.runBlocking(endEffector.diffyIdle);
+                    follower.followPath(lineUpGrabSPecimen3);
+                    Actions.runBlocking(new SleepAction(1.5));
+                    setPathState(29);
+                }
+                break;
+            case 29:
+               if (!follower.isBusy()) {
+                    follower.followPath(grabSpecimen1Path);
+                    setPathState(30);
+                }
+                break;
+                    case 30:
+                        if (!follower.isBusy()) {
+                            Actions.runBlocking(endEffector.closeClaw);
+                            Actions.runBlocking(new SleepAction(0.5));
+                            Actions.runBlocking(endEffector.diffyIdle);
+//                    Actions.runBlocking(preSpecimenScore());
+////                    Actions.runBlocking(arm.autoArmPreSpecimen);
+                            follower.followPath(lineUpScoreSpecimen1);
+                            setPathState(31);
+                        }
+                        break;
+                    case 31:
+                        if (!follower.isBusy()) {
+                            Actions.runBlocking(new SleepAction(0.5));
+                            Actions.runBlocking(endEffector.closeClaw);
+                            Actions.runBlocking(endEffector.autoPreSpecimen);
+                            Actions.runBlocking(arm.autoArmPreSpecimen);
+                            Actions.runBlocking(new SleepAction(1));
+//                    Actions.runBlocking(endEffector.openClaw);
+                            follower.followPath(scorePath);
+                            setPathState(32);
+                        }
+                        break;
+
+            case 32:
+                if (!follower.isBusy()) {
+                Actions.runBlocking(new SleepAction(2.5));
+                Actions.runBlocking(endEffector.openClaw);
+                Actions.runBlocking(new SleepAction(0.5));
+                follower.followPath(specimenCycleLineUpPath);
+                setPathState(33);
+            }
+            break;
+
+            case 33:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(arm.armMax);
+                    Actions.runBlocking(endEffector.diffyIdle);
+                    Actions.runBlocking(new SleepAction(1.5));
+                    setPathState(34);
+
+                }
+
+
+            case 34:
+                if (!follower.isBusy()) {
+                follower.followPath(parkPath);
+                    setPathState(35);
+                }
+                break;
+            case 35 :
                 if (!follower.isBusy()) {
                     setPathState(-1);
                 }

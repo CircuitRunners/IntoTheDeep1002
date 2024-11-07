@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
 import org.firstinspires.ftc.teamcode.config.subsystems.MecanumDrive;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
+import com.qualcomm.robotcore.hardware.AnalogInput;
+
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import org.firstinspires.ftc.teamcode.config.util.RobotConstants;
@@ -42,11 +44,15 @@ public class MainTeleop extends OpMode {
 
     private boolean prevDown = false;
     private int intakeState = 0;
+    private AnalogInput encoder;
+    // AnalogInput
+
     @Override
     public void init() {
         telemetry.addLine("Initializing...");
         telemetry.update();
 
+        encoder = hardwareMap.get(AnalogInput.class, "enc");
         arm = new Arm(hardwareMap);
         endEffector = new EndEffector(hardwareMap);
         drive.init(hardwareMap);
@@ -62,6 +68,8 @@ public class MainTeleop extends OpMode {
      */
     @Override
     public void loop() {
+        double encPosition = encoder.getVoltage() / 3.2 * 360;
+
         SparkFunOTOS.Pose2D pos = sparkfunOTOS.getPosition();
         double forward = -gamepad1.left_stick_y;
         double right = gamepad1.left_stick_x;
@@ -145,6 +153,7 @@ public class MainTeleop extends OpMode {
         // Telemetry
         telemetry.addData("Arm Target", arm.getArmTarget());
         telemetry.addData("Arm Pos", arm.armAngle());
+        telemetry.addData("Arm Position", encPosition);
         telemetry.addData("Current", arm.getArmCurrent());
         telemetry.addData("Claw Position", endEffector.getClawPosition());
         telemetry.addData("Diffy1 Position", "%.2f", endEffector.getDiffy1Position());
