@@ -406,7 +406,7 @@ public class leftSpecimen extends OpMode{
                     break;
                     case 24:
                         if (!follower.isBusy()) {
-                            //follower.followPath(grabSpecimen1Path);
+                            follower.followPath(grabSpecimen);
                             setPathState(25);
                         }
                         break;
@@ -453,7 +453,7 @@ public class leftSpecimen extends OpMode{
                 break;
             case 29:
                if (!follower.isBusy()) {
-                    //follower.followPath(grabSpecimen1Path);
+                    follower.followPath(grabSpecimen);
                     setPathState(30);
                 }
                 break;
