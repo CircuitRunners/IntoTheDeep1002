@@ -35,17 +35,18 @@ public class leftSpecimen extends OpMode{
     private Pose parkPos = new Pose(10, 64, Math.toRadians(180));
     private Pose cycleSpecimen1LineupPos = new Pose(20, 39.8, Math.toRadians(180));
     private Pose cycleSpecimen1IntakePos = new Pose(59, 39.8, Math.toRadians(180));
-    private Pose cycleSPecimenBehindPos = new Pose(59,23, Math.toRadians(180));
-    private Pose cycleSpecimen2BehindPos = new Pose(59,6.2, Math.toRadians(180));
-    private Pose cycleSpecimenObs1Pos = new Pose(13, 23, Math.toRadians(180));
-    private Pose backUpFromObsPos= new Pose(18, 9, Math.toRadians(180));
-    private Pose specimen3BehindPos = new Pose(59, 2.5, Math.toRadians(180));
-    private Pose cycleSpecimen3Pos = new Pose(60, 9, Math.toRadians(180));
-    private Pose cycleSpecimenObs3Pos = new Pose(13, 9, Math.toRadians(180));
-    private Pose cycleSpecimenObs2Pos = new Pose(13, 9, Math.toRadians(180));
+    private Pose cycleSPecimenBehindPos = new Pose(59,30, Math.toRadians(180));
+    private Pose cycleSpecimen2BehindPos = new Pose(59,18, Math.toRadians(180));
+    private Pose cycleSpecimenObs1Pos = new Pose(13, 30, Math.toRadians(180));
+    private Pose backUpFromObsPos= new Pose(29, 18, Math.toRadians(180));
+    private Pose turnObs1Pos = new Pose(29, 18, Math.toRadians(0));
+    private Pose specimen3BehindPos = new Pose(59, 11, Math.toRadians(180));
+    private Pose cycleSpecimen3Pos = new Pose(60, 11, Math.toRadians(180));
+    private Pose cycleSpecimenObs3Pos = new Pose(13, 11, Math.toRadians(180));
+    private Pose cycleSpecimenObs2Pos = new Pose(13, 18, Math.toRadians(180));
     private Pose lineUpGrabSpecimen = new Pose(20, 24, Math.toRadians(0));
-    private Pose grabSpecimen1 = new Pose(17, 24, Math.toRadians(0));
-    private Pose specimenPos2 = new Pose(35, 65, Math.toRadians(180));
+    private Pose grabSpecimenPos = new Pose(10, 18, Math.toRadians(0));
+    private Pose grabSpecimen1 = new Pose(17, 24, Math.toRadians(180));
     private Pose specimenScorePos2 = new Pose(37, 65, Math.toRadians(180));
     private Pose specimenPos3 = new Pose(35, 66, Math.toRadians(180));
     private Pose specimenScorePos3 = new Pose(37, 66, Math.toRadians(180));
@@ -54,7 +55,7 @@ public class leftSpecimen extends OpMode{
 //pushing
 
 
-    private PathChain specimenPath, lineUpGrabSPecimen3,cycleSpecimen3Behind, parkPath,lineUpGrabSpecimen1, scorePath,backUpFromObs, lineUpScoreSpecimen1, scoreSpecimen1, specimen1Behind,finalParkPath, cycleSpecimen1Lineup,cycleSpecimen1, cycleSpecimenObs1, cycleSpecimen2,cycleSpecimen2Behind, cycleSpecimenObs2, specimenCycleLineUpPath, grabSpecimen1Path, specimenPos2Path, specimenScorePos2Path, grabSpecimen2Path, specimenPos3Path, specimenScorePos3Path, lineUpGrabSpecimenPath, specimenCycleLineUpPath2, cycleSpecimen3Path, cycleSpecimenObs3Path;
+    private PathChain specimenPath, scorePath, cycleSpecimen3Behind, parkPath,lineUpGrabSpecimen1, turnObs1,backUpFromObs, lineUpScoreSpecimen1, scoreSpecimen1, specimen1Behind,finalParkPath, cycleSpecimen1Lineup,cycleSpecimen1, cycleSpecimenObs1, cycleSpecimen2,cycleSpecimen2Behind, cycleSpecimenObs2, specimenCycleLineUpPath, grabSpecimen, lineUpGrabSpecimen3, specimenPos2Path, specimenScorePos2Path, grabSpecimen2Path, specimenPos3Path, specimenScorePos3Path, lineUpGrabSpecimenPath, specimenCycleLineUpPath2, cycleSpecimen3Path, cycleSpecimenObs3Path;
     public void buildPaths() {
 //        specimenPath = follower.pathBuilder()
 //                .addPath(new BezierLine(new Point(startPosition), new Point(specimen)))
@@ -109,6 +110,10 @@ public class leftSpecimen extends OpMode{
                 .addPath(new BezierLine(new Point(cycleSpecimenObs2Pos), new Point(backUpFromObsPos)))
                 .setConstantHeadingInterpolation(backUpFromObsPos.getHeading())
                 .build();
+        turnObs1 = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(backUpFromObsPos), new Point(turnObs1Pos)))
+                .setConstantHeadingInterpolation(turnObs1Pos.getHeading())
+                .build();
         lineUpGrabSpecimen1 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(backUpFromObsPos), new Point(lineUpGrabSpecimen)))
                 .setConstantHeadingInterpolation(lineUpGrabSpecimen.getHeading())
@@ -117,9 +122,9 @@ public class leftSpecimen extends OpMode{
                 .addPath(new BezierLine(new Point(specimenScorePos), new Point(specimenCycleLineUp)))
                 .setConstantHeadingInterpolation(specimenCycleLineUp.getHeading())
                 .build();
-        grabSpecimen1Path = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(lineUpGrabSpecimen), new Point(grabSpecimen1)))
-                .setConstantHeadingInterpolation(grabSpecimen1.getHeading())
+        grabSpecimen = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(turnObs1Pos), new Point(grabSpecimenPos)))
+                .setConstantHeadingInterpolation(grabSpecimenPos.getHeading())
                 .build();
         lineUpScoreSpecimen1 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(grabSpecimen1), new Point(specimenCycleLineUp)))
@@ -129,14 +134,14 @@ public class leftSpecimen extends OpMode{
                 .addPath(new BezierLine(new Point(specimenCycleLineUp), new Point(specimenScorePos)))
                 .setConstantHeadingInterpolation(specimenScorePos.getHeading())
                 .build();
-        specimenPos2Path = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(grabSpecimen1), new Point(specimenPos2)))
-                .setConstantHeadingInterpolation(specimenPos2.getHeading())
-                .build();
-        specimenScorePos2Path = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(specimenPos2), new Point(specimenScorePos2)))
-                .setConstantHeadingInterpolation(specimenScorePos2.getHeading())
-                .build();
+//        specimenPos2Path = follower.pathBuilder()
+//                .addPath(new BezierLine(new Point(grabSpecimen1), new Point(specimenPos2)))
+//                .setConstantHeadingInterpolation(specimenPos2.getHeading())
+//                .build();
+//        specimenScorePos2Path = follower.pathBuilder()
+//                .addPath(new BezierLine(new Point(specimenPos2), new Point(specimenScorePos2)))
+//                .setConstantHeadingInterpolation(specimenScorePos2.getHeading())
+//                .build();
         grabSpecimen2Path = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(cycleSpecimenObs3Pos), new Point(grabSpecimen1)))
                 .setConstantHeadingInterpolation(grabSpecimen1.getHeading())
@@ -165,7 +170,7 @@ public class leftSpecimen extends OpMode{
                 .addPath(new BezierLine(new Point(specimen3BehindPos), new Point(cycleSpecimenObs3Pos)))
                 .setConstantHeadingInterpolation(cycleSpecimenObs3Pos.getHeading())
                 .build();
-        lineUpGrabSPecimen3 = follower.pathBuilder()
+        lineUpGrabSpecimen3 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(specimenCycleLineUp), new Point(lineUpGrabSpecimen)))
                 .setConstantHeadingInterpolation(grabSpecimen1.getHeading())
                 .build();
@@ -181,7 +186,7 @@ public class leftSpecimen extends OpMode{
         switch (pathState) {
             case 0:
                 Actions.runBlocking(endEffector.closeClaw);
-                Actions.runBlocking(endEffector.diffyIdle);
+                Actions.runBlocking(endEffector.diffyInit);
                 setPathState(2);
                 break;
 //            case 1:
@@ -197,7 +202,7 @@ public class leftSpecimen extends OpMode{
                     Actions.runBlocking(endEffector.closeClaw);
                     Actions.runBlocking(endEffector.autoPreSpecimen);
                     Actions.runBlocking(arm.autoArmPreSpecimen);
-                    Actions.runBlocking(new SleepAction(1));
+                    Actions.runBlocking(new SleepAction(.25));
                     //Actions.runBlocking(specimenScore());
 //                    Actions.runBlocking(endEffector.openClaw);
                     follower.followPath(scorePath);
@@ -205,10 +210,10 @@ public class leftSpecimen extends OpMode{
                 }
                 break;
             case 3:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 3) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 2) {
                     follower.followPath(specimenCycleLineUpPath);
                     Actions.runBlocking(endEffector.openClaw);
-                    Actions.runBlocking(new SleepAction(1));
+                    Actions.runBlocking(new SleepAction(.25));
                     //follower.followPath(parkPath);
                     setPathState(5);
                 }
@@ -222,18 +227,18 @@ public class leftSpecimen extends OpMode{
             case 5:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(arm.armMax);
-                    Actions.runBlocking(endEffector.diffyIdle);
+                    //Actions.runBlocking(endEffector.diffyIdle);
                     follower.followPath(cycleSpecimen1Lineup);
-                    Actions.runBlocking(new SleepAction(1.5));
+                    Actions.runBlocking(new SleepAction(.5));
                     setPathState(6);
                 }
                 break;
             case 6:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(endEffector.diffyObs);
-                    Actions.runBlocking(new SleepAction(0.5));
+                    Actions.runBlocking(new SleepAction(0.15));
                     follower.followPath(cycleSpecimen1);
-                    Actions.runBlocking(new SleepAction(0.5));
+                    Actions.runBlocking(new SleepAction(0.15));
                     setPathState(7);
                 }
                 break;
@@ -241,7 +246,7 @@ public class leftSpecimen extends OpMode{
                 if (!follower.isBusy()) {
                     follower.followPath(specimen1Behind);
                     Actions.runBlocking(new SleepAction(0.5));
-                    Actions.runBlocking(endEffector.closeClaw);
+                    //Actions.runBlocking(endEffector.closeClaw);
                     Actions.runBlocking(new SleepAction(0.5));
 //                    Actions.runBlocking(endEffector.diffyClear);
 //                    Actions.runBlocking(endEffector.closeClaw);
@@ -299,36 +304,37 @@ public class leftSpecimen extends OpMode{
                 break;
             case 12:
                 if (!follower.isBusy()){
-                follower.followPath(backUpFromObs);
+                    follower.followPath(backUpFromObs);
 //                follower.followPath(cycleSpecimen3Path);
 //                follower.followPath(cycleSpecimenObs3Path);
-                setPathState(13);
+                    setPathState(13);
                 }
                 break;
             case 13:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(endEffector.diffyObs);
+                    follower.followPath(turnObs1);
+                    Actions.runBlocking(arm.armObservation);
                     Actions.runBlocking(endEffector.openClaw);
-                    Actions.runBlocking(new SleepAction(1.5));
-                    follower.followPath(lineUpGrabSpecimen1);
+                    Actions.runBlocking(endEffector.diffyObs);
+                    //Actions.runBlocking(endEffector.diffyObs);
+                    Actions.runBlocking(new SleepAction(.5));
                     setPathState(14);
                 }
                 break;
             case 14:
                 if (!follower.isBusy()) {
-                    follower.followPath(grabSpecimen1Path);
+                    follower.followPath(grabSpecimen);
                     setPathState(15);
                 }
                 break;
             case 15:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(endEffector.closeClaw);
-                    Actions.runBlocking(endEffector.diffyIdle);
-                    Actions.runBlocking(new SleepAction(1.5));
+                    Actions.runBlocking(new SleepAction(.5));
 //                    Actions.runBlocking(preSpecimenScore());
 ////                    Actions.runBlocking(arm.autoArmPreSpecimen);
                     follower.followPath(lineUpScoreSpecimen1);
-                    setPathState(16);
+                    setPathState(35);
                 }
                 break;
             case 16:
@@ -400,7 +406,7 @@ public class leftSpecimen extends OpMode{
                     break;
                     case 24:
                         if (!follower.isBusy()) {
-                            follower.followPath(grabSpecimen1Path);
+                            //follower.followPath(grabSpecimen1Path);
                             setPathState(25);
                         }
                         break;
@@ -440,14 +446,14 @@ public class leftSpecimen extends OpMode{
                 if (!follower.isBusy()) {
                     Actions.runBlocking(arm.armMax);
                     Actions.runBlocking(endEffector.diffyIdle);
-                    follower.followPath(lineUpGrabSPecimen3);
+                    follower.followPath(lineUpGrabSpecimen3);
                     Actions.runBlocking(new SleepAction(1.5));
                     setPathState(29);
                 }
                 break;
             case 29:
                if (!follower.isBusy()) {
-                    follower.followPath(grabSpecimen1Path);
+                    //follower.followPath(grabSpecimen1Path);
                     setPathState(30);
                 }
                 break;
@@ -543,7 +549,7 @@ public class leftSpecimen extends OpMode{
         arm = new Arm(hardwareMap);
         endEffector = new EndEffector(hardwareMap);
         endEffector.closeClaw();
-        endEffector.idlePosition();
+        endEffector.initPosition();
         buildPaths();
     }
 
