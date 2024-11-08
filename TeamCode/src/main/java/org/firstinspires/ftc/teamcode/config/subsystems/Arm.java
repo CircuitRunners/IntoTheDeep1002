@@ -27,7 +27,7 @@ public class Arm {
     public DcMotorEx armMotor;
     // public AnalogInput enc;
 
-    public RunAction armLowBasket,armIntake,armSpecimen, armObservation, armMax, armSpecimenScore, armClear, armUpright, autoArmPreSpecimen, autoArmSpecimen;
+    public RunAction armLowBasket,armIntake,armSpecimen, armObservation,armObservationUp, armMax, armSpecimenScore, armClear, armUpright, autoArmPreSpecimen, autoArmSpecimen, autoArmSpecimen2;
 
     public double armAngle() {
         return (armMotor.getCurrentPosition() - armStart)/TICK_PER_RAD - ARM_OFF;
@@ -47,12 +47,14 @@ public class Arm {
         armIntake = new RunAction(this::armIntake);
         armSpecimen = new RunAction(this::armSpecimen);
         armObservation = new RunAction(this::armObservation);
+        armObservationUp = new RunAction(this::armObservationUp);
         armMax = new RunAction(this::armMax);
         armSpecimenScore = new RunAction(this::armSpecimenScore);
         armClear = new RunAction(this::armClear);
         armUpright = new RunAction(this::armUpright);
         autoArmPreSpecimen = new RunAction(this::autoArmPreSpecimen);
         autoArmSpecimen = new RunAction(this::autoArmSpecimen);
+        autoArmSpecimen2 = new RunAction(this::autoArmSpecimen2);
     }
 
     public void update() {
@@ -96,13 +98,15 @@ public class Arm {
         setArmTarget(ARM_SPECIMEN);
     }
     public void armObservation() {setArmTarget(ARM_OBSERVATION);}
+    public void armObservationUp() {setArmTarget(0.9);}
     public void armMax() {setArmTarget(ARM_MAX);}
     public void armSpecimenScore() {setArmTarget(ARM_SPECIMEN_SCORE);}
 
     public void armClear() {setArmTarget(ARM_CLEAR);}
     public void armUpright() {setArmTarget(-1.67);}
-    public void autoArmPreSpecimen() {setArmTarget(0.03);}
+    public void autoArmPreSpecimen() {setArmTarget(-0.05);}
     public void autoArmSpecimen() {setArmTarget(0.13);}
+    public void autoArmSpecimen2() {setArmTarget(-0.15);}
 
     public void resetEncoder() {
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

@@ -59,14 +59,14 @@ public class EndEffector {
     }
 
     public void openClaw() {
-        claw.setPosition(0.4);
+        claw.setPosition(0);
     }
 
     public void closeClaw() {
-        claw.setPosition(0.65);
+        claw.setPosition(0.6);
     }
     public void switchClaw() {
-        if (claw.getPosition() < 0.60) {
+        if (claw.getPosition() < 0.50) {
             closeClaw();
         } else {
             openClaw();
@@ -110,12 +110,12 @@ public class EndEffector {
     }
 
     public void specimenScorePosition() {
-        diffy1.setPosition(0.83);
-        diffy2.setPosition(0.66);
+        diffy1.setPosition(0.63);
+        diffy2.setPosition(0.46);
     }
     public void basketPosition() {
         diffy1.setPosition(0.53);
-        diffy2.setPosition(0.47);
+        diffy2.setPosition(0.35);
     }
     public void obsPosition() {
         diffy1.setPosition(0.49);
