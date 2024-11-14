@@ -139,20 +139,16 @@ public class MainTeleop extends OpMode {
             endEffector.idlePosition();
         }
 
-        if (gamepad2.right_bumper) {
-            arm.resetEncoder();
-        }
 
         if (gamepad2.triangle && !prevTrianglePressed) {
             endEffector.switchClaw();
         }
         prevTrianglePressed = gamepad2.triangle;
-
-       controlArm(gamepad2.left_stick_y, gamepad2.left_bumper);
+        arm.manual(gamepad2.left_stick_y);
 
         // Telemetry
         telemetry.addData("Arm Target", arm.getArmTarget());
-        telemetry.addData("Arm Pos", arm.armAngle());
+        telemetry.addData("Arm Pos", arm.getCurrentPosition());
         // telemetry.addData("Arm Position", encPosition);
         telemetry.addData("Current", arm.getArmCurrent());
         telemetry.addData("Claw Position", endEffector.getClawPosition());
@@ -163,7 +159,7 @@ public class MainTeleop extends OpMode {
             arm.update();
         } else {
 //            if (!(arm.armMotor.getCurrent(CurrentUnit.AMPS) > 2))
-            arm.armMotor.setPower(0);
+            arm.arm_motor.setPower(0);
         }
     }
     private void configureOTOS() {
@@ -188,27 +184,6 @@ public class MainTeleop extends OpMode {
         double newRight = r * Math.cos(theta);
 
         drive.drive(newForward, newRight, rotate);
-    }
-
-    public void controlArm(double joystickInput, boolean buttonPressed) {
-        // Get the current arm angle
-        double target = arm.getArmTarget();
-
-        boolean isAboveThreshold = target > -1.63;
-
-        if (Math.abs(joystickInput) < 0.05) {
-            joystickWasZero = true; // Joystick is considered released
-        } else {
-            if (joystickWasZero) {
-                shouldReverseInput = isAboveThreshold;
-            }
-            joystickWasZero = false; // Joystick is now active
-        }
-
-        // Adjust the joystick input based on the shouldReverseInput flag
-        double adjustedInput = shouldReverseInput ? -joystickInput : joystickInput;
-        // Move the arm using the adjusted joystick input
-        arm.manual(-adjustedInput, joystickInput, buttonPressed);
     }
 
     public Action intakePickup() {

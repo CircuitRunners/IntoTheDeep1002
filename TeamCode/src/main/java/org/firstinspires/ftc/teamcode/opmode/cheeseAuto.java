@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.BezierL
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Point;
+import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Vector;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.Timer;
 import org.firstinspires.ftc.teamcode.config.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.config.subsystems.EndEffector;
@@ -40,19 +41,19 @@ public class cheeseAuto extends OpMode{
 
     private Pose specimenCycleLineUp = new Pose(20, 68, Math.toRadians(180));
     private Pose parkPos = new Pose(10, 64, Math.toRadians(180));
-    private Pose cycleSpecimen1LineupPos = new Pose(20, 39.8, Math.toRadians(180));
-    private Pose cycleSpecimen1IntakePos = new Pose(59, 39.8, Math.toRadians(180));
-    private Pose cycleSPecimenBehindPos = new Pose(59,30, Math.toRadians(180));
+    private Pose cycleSpecimen1LineupPos = new Pose(22, 39.8, Math.toRadians(180));
+    private Pose cycleSpecimen1IntakePos = new Pose(59, 38.8, Math.toRadians(180));
+    private Pose cycleSPecimenBehindPos = new Pose(59,28.5, Math.toRadians(180));
     private Pose cycleSpecimen2BehindPos = new Pose(59,18, Math.toRadians(180));
     private Pose cycleSpecimenObs1Pos = new Pose(14, 30, Math.toRadians(180));
-    private Pose backUpFromObsPos= new Pose(29, 18, Math.toRadians(180));
+    private Pose backUpFromObsPos= new Pose(25, 18, Math.toRadians(180));
     private Pose turnObs1Pos = new Pose(20, 18, Math.toRadians(0));
     private Pose specimen3BehindPos = new Pose(59, 11, Math.toRadians(180));
     private Pose cycleSpecimen3Pos = new Pose(60, 11, Math.toRadians(180));
     private Pose cycleSpecimenObs3Pos = new Pose(15, 11, Math.toRadians(180));
     private Pose cycleSpecimenObs2Pos = new Pose(15, 18, Math.toRadians(180));
     private Pose lineUpGrabSpecimen = new Pose(20, 24, Math.toRadians(0));
-    private Pose grabSpecimenPos = new Pose(13.75, 18, Math.toRadians(0));
+    private Pose grabSpecimenPos = new Pose(8.75, 18, Math.toRadians(0)); //11.75 x og
     private Pose grabSpecimen1 = new Pose(17, 24, Math.toRadians(180));
     private Pose specimenScorePos2 = new Pose(37, 65, Math.toRadians(180));
     private Pose specimenPos3 = new Pose(35, 66, Math.toRadians(180));
@@ -62,7 +63,7 @@ public class cheeseAuto extends OpMode{
 //pushing
 
 
-    private PathChain specimenPath, scorePath, cycleSpecimen3Behind, parkPath,lineUpGrabSpecimen1, turnObs1,backUpFromObs, lineUpScoreSpecimen1, scoreSpecimen1, specimen1Behind,finalParkPath, cycleSpecimen1Lineup,cycleSpecimen1, cycleSpecimenObs1, cycleSpecimen2,cycleSpecimen2Behind, cycleSpecimenObs2, specimenCycleLineUpPath, grabSpecimen, lineUpGrabSpecimen3, specimenPos2Path, specimenScorePos2Path, grabSpecimen2Path, specimenPos3Path, specimenScorePos3Path, lineUpGrabSpecimenPath, specimenCycleLineUpPath2, cycleSpecimen3Path, cycleSpecimenObs3Path, cycledSpecimen1Path, cheeseAuto, cheeseCycleAuto;
+    private PathChain specimenPath, scorePath, cycleSpecimen3Behind, parkPath,lineUpGrabSpecimen1, turnObs1,backUpFromObs, lineUpScoreSpecimen1, scoreSpecimen1, specimen1Behind,finalParkPath, cycleSpecimen1Lineup,cycleSpecimen1, cycleSpecimenObs1, cycleSpecimen2,cycleSpecimen2Behind, cycleSpecimenObs2, specimenCycleLineUpPath, grabSpecimen, lineUpGrabSpecimen3, specimenPos2Path, specimenScorePos2Path, grabSpecimen2Path, specimenPos3Path, specimenScorePos3Path, lineUpGrabSpecimenPath, specimenCycleLineUpPath2, cycleSpecimen3Path, cycleSpecimenObs3Path, cycledSpecimen1Path, cheeseAuto, cheeseCycleAuto, mergedPath;
     public void buildPaths() {
 //        specimenPath = follower.pathBuilder()
 //                .addPath(new BezierLine(new Point(startPosition), new Point(specimen)))
@@ -91,6 +92,13 @@ public class cheeseAuto extends OpMode{
         specimen1Behind = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(cycleSpecimen1IntakePos), new Point(cycleSPecimenBehindPos)))
                 .setConstantHeadingInterpolation(cycleSPecimenBehindPos.getHeading())
+                .build();
+
+        mergedPath = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(cycleSpecimen1LineupPos), new Point(cycleSpecimen1IntakePos)))
+                .setConstantHeadingInterpolation(cycleSpecimen1IntakePos.getHeading())
+                .addPath(new BezierLine(new Point(cycleSpecimen1LineupPos), new Point(cycleSpecimen1IntakePos)))
+                .setConstantHeadingInterpolation(cycleSpecimen1IntakePos.getHeading())
                 .build();
         cycleSpecimenObs1 = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(cycleSPecimenBehindPos), new Point(cycleSpecimenObs1Pos)))
@@ -220,16 +228,15 @@ public class cheeseAuto extends OpMode{
                     Actions.runBlocking(arm.autoArmPreSpecimen);
                     Actions.runBlocking(new SleepAction(.25));
                     //Actions.runBlocking(specimenScore());
-//                    Actions.runBlocking(endEffector.openClaw);
+//                    Actions.runBlocking(endEffector.openClawAuto);
                     follower.followPath(scorePath);
                     setPathState(3);
                 }
                 break;
             case 3:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 2) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(specimenCycleLineUpPath);
-                    Actions.runBlocking(endEffector.openClaw);
-                    Actions.runBlocking(new SleepAction(.25));
+                    Actions.runBlocking(endEffector.openClawAuto);
                     //follower.followPath(parkPath);
                     setPathState(5);
                 }
@@ -238,6 +245,7 @@ public class cheeseAuto extends OpMode{
             case 5:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(arm.armMax);
+                    Actions.runBlocking(endEffector.diffyObs);
                     //Actions.runBlocking(endEffector.diffyIdle);
                     follower.followPath(cycleSpecimen1Lineup);
                     setPathState(6);
@@ -273,7 +281,7 @@ public class cheeseAuto extends OpMode{
             case 13:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(arm.armObservation);
-                    Actions.runBlocking(endEffector.openClaw);
+                    Actions.runBlocking(endEffector.openClawAuto);
                     Actions.runBlocking(endEffector.diffyObs);
                     follower.followPath(turnObs1);
                     setPathState(14);
@@ -282,13 +290,21 @@ public class cheeseAuto extends OpMode{
             case 14:
                 if (!follower.isBusy()) {
                     follower.followPath(grabSpecimen);
-                    setPathState(15);
+                    setPathState(112);
+                }
+                if (follower.getVelocity().getXComponent() == 0 ) {
+                    setPathState(112);
                 }
                 break;
+            case 112:
+                Actions.runBlocking(new SleepAction(.25));
+                Actions.runBlocking(endEffector.closeClaw);
+                setPathState(15);
+                break;
             case 15:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 2) {
                     Actions.runBlocking(endEffector.closeClaw);
-                    Actions.runBlocking(new SleepAction(.5));
+                    Actions.runBlocking(new SleepAction(.25));
 //                    Actions.runBlocking(preSpecimenScore());
 ////                    Actions.runBlocking(arm.autoArmPreSpecimen);
                     follower.followPath(lineUpScoreSpecimen1);
@@ -300,18 +316,18 @@ public class cheeseAuto extends OpMode{
                     Actions.runBlocking(endEffector.autoPreSpecimen);
                     Actions.runBlocking(arm.autoArmSpecimen2);
                     follower.followPath(scoreSpecimen1);
-//                    Actions.runBlocking(endEffector.openClaw);
+//                    Actions.runBlocking(endEffector.openClawAuto);
                     setPathState(17);
                 }
                 break;
             case 17:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 2) {
-                    Actions.runBlocking(endEffector.openClaw);
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
+                    Actions.runBlocking(endEffector.openClawAuto);
                     setPathState(18);
                 }
                 break;
             case 18:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 2) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(cheeseAuto);
                     Actions.runBlocking(new SleepAction(0.5));
                     Actions.runBlocking(arm.armObservation);
@@ -348,169 +364,11 @@ public class cheeseAuto extends OpMode{
                 }
                 break;
             case 69:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 2) {
-                    Actions.runBlocking(endEffector.closeClaw);
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
+                    Actions.runBlocking(endEffector.openClawAuto);
                 }
                 setPathState(300);
                 break;
-//            case 17:
-//                if (!follower.isBusy()) {
-//                    Actions.runBlocking(new SleepAction(2.5));
-//                    Actions.runBlocking(endEffector.openClaw);
-//                    Actions.runBlocking(new SleepAction(0.5));
-//                    follower.followPath(specimenCycleLineUpPath);
-//                    setPathState(33);
-//                }
-//                break;
-//
-//            case 18:
-//                if (!follower.isBusy()) {
-//                Actions.runBlocking(arm.armMax);
-//                Actions.runBlocking(endEffector.diffyIdle);
-//                follower.followPath(cycleSpecimen1Lineup);
-//                Actions.runBlocking(new SleepAction(1.5));
-//                setPathState(19);
-//            }
-//                break;
-//            case 19:
-//                if (!follower.isBusy()) {
-//                    follower.followPath(cycleSpecimen1);
-//                    Actions.runBlocking(new SleepAction(0.5));
-//                    setPathState(20);
-//                }
-//                break;
-//            case 20:
-//                if (!follower.isBusy()) {
-//                    follower.followPath(cycleSpecimen3Behind);
-//                    setPathState(21);
-//                }
-//                break;
-//            case 21:
-//                if (!follower.isBusy()) {
-//                    follower.followPath(cycleSpecimenObs3Path);
-//                    setPathState(22);
-//                }
-//                break;
-//            case 22:
-//                if (!follower.isBusy()){
-//                    follower.followPath(backUpFromObs);
-////                follower.followPath(cycleSpecimen3Path);
-////                follower.followPath(cycleSpecimenObs3Path);
-//                    setPathState(23);
-//                    }
-//                break;
-//                case 23:
-//                    if (!follower.isBusy()) {
-//                        Actions.runBlocking(endEffector.diffyObs);
-//                        Actions.runBlocking(endEffector.openClaw);
-//                        Actions.runBlocking(new SleepAction(1.5));
-//                        follower.followPath(lineUpGrabSpecimen1);
-//                        setPathState(24);
-//                        }
-//                    break;
-//                    case 24:
-//                        if (!follower.isBusy()) {
-//                            follower.followPath(grabSpecimen);
-//                            setPathState(25);
-//                        }
-//                        break;
-//            case 25:
-//                if (!follower.isBusy()) {
-//                    Actions.runBlocking(endEffector.closeClaw);
-//                    Actions.runBlocking(new SleepAction(0.5));
-//                    Actions.runBlocking(endEffector.diffyIdle);
-////                    Actions.runBlocking(preSpecimenScore());
-//////                    Actions.runBlocking(arm.autoArmPreSpecimen);
-//                    follower.followPath(lineUpScoreSpecimen1);
-//                    setPathState(26);
-//                }
-//                break;
-//            case 26:
-//                if (!follower.isBusy()) {
-//                    Actions.runBlocking(new SleepAction(0.5));
-//                    Actions.runBlocking(endEffector.closeClaw);
-//                    Actions.runBlocking(endEffector.autoPreSpecimen);
-//                    Actions.runBlocking(arm.autoArmPreSpecimen);
-//                    Actions.runBlocking(new SleepAction(1));
-////                    Actions.runBlocking(endEffector.openClaw);
-//                    follower.followPath(scorePath);
-//                    setPathState(27);
-//                }
-//                break;
-//            case 27:
-//                if (!follower.isBusy()) {
-//                    Actions.runBlocking(new SleepAction(2.5));
-//                    Actions.runBlocking(endEffector.openClaw);
-//                    Actions.runBlocking(new SleepAction(0.5));
-//                    follower.followPath(specimenCycleLineUpPath);
-//                    setPathState(28);
-//                }
-//                break;
-//            case 28:
-//                if (!follower.isBusy()) {
-//                    Actions.runBlocking(arm.armMax);
-//                    Actions.runBlocking(endEffector.diffyIdle);
-//                    follower.followPath(lineUpGrabSpecimen3);
-//                    Actions.runBlocking(new SleepAction(1.5));
-//                    setPathState(29);
-//                }
-//                break;
-//            case 29:
-//               if (!follower.isBusy()) {
-//                    follower.followPath(grabSpecimen);
-//                    setPathState(30);
-//                }
-//                break;
-//                    case 30:
-//                        if (!follower.isBusy()) {
-//                            Actions.runBlocking(endEffector.closeClaw);
-//                            Actions.runBlocking(new SleepAction(0.5));
-//                            Actions.runBlocking(endEffector.diffyIdle);
-////                    Actions.runBlocking(preSpecimenScore());
-//////                    Actions.runBlocking(arm.autoArmPreSpecimen);
-//                            follower.followPath(lineUpScoreSpecimen1);
-//                            setPathState(31);
-//                        }
-//                        break;
-//                    case 31:
-//                        if (!follower.isBusy()) {
-//                            Actions.runBlocking(new SleepAction(0.5));
-//                            Actions.runBlocking(endEffector.closeClaw);
-//                            Actions.runBlocking(endEffector.autoPreSpecimen);
-//                            Actions.runBlocking(arm.autoArmPreSpecimen);
-//                            Actions.runBlocking(new SleepAction(1));
-////                    Actions.runBlocking(endEffector.openClaw);
-//                            follower.followPath(scorePath);
-//                            setPathState(32);
-//                        }
-//                        break;
-//
-//            case 32:
-//                if (!follower.isBusy()) {
-//                Actions.runBlocking(new SleepAction(2.5));
-//                Actions.runBlocking(endEffector.openClaw);
-//                Actions.runBlocking(new SleepAction(0.5));
-//                follower.followPath(specimenCycleLineUpPath);
-//                setPathState(33);
-//            }
-//            break;
-//
-//            case 33:
-//                if (!follower.isBusy()) {
-//                    Actions.runBlocking(arm.armMax);
-//                    Actions.runBlocking(endEffector.diffyIdle);
-//                    Actions.runBlocking(new SleepAction(1.5));
-//                    setPathState(34);
-//
-//                }
-//
-//
-//            case 34:
-//                if (!follower.isBusy()) {
-//                follower.followPath(parkPath);
-//                    setPathState(35);
-//                }
-//                break;
             case 300 :
                 if (!follower.isBusy()) {
                     setPathState(-1);
@@ -539,7 +397,7 @@ public class cheeseAuto extends OpMode{
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toRadians(follower.getPose().getHeading()));
         telemetry.addData("Arm Target", arm.getArmTarget());
-        telemetry.addData("Arm Pos", arm.armAngle());
+        telemetry.addData("Arm Pos", arm.getCurrentPosition());
         telemetry.addData("Diffy1 Position", "%.2f", endEffector.getDiffy1Position());
         telemetry.addData("Diffy2 Position", "%.2f", endEffector.getDiffy2Position());
         telemetry.update();
@@ -580,7 +438,7 @@ public class cheeseAuto extends OpMode{
                 endEffector.closeClaw,
                 new ParallelAction(
                         endEffector.closeClaw,
-                      //  endEffector.autoPreSpecimen,
+                        //  endEffector.autoPreSpecimen,
                         arm.autoArmPreSpecimen
                 ),
                 endEffector.closeClaw

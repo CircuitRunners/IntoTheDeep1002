@@ -14,34 +14,39 @@ import static org.firstinspires.ftc.teamcode.config.util.RobotConstants.*;
 
 import org.firstinspires.ftc.teamcode.config.util.action.RunAction;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+
+@Config
 public class Arm {
-    public static CustomPIDFCoefficients PID = new CustomPIDFCoefficients(kP, kI, kD, new Arm.ArmPIDF());
+    private PIDController controller;
+    public static double p =0.05, i = 0, d = 0;
+    public static double f = 0;
 
-    static class ArmPIDF implements FeedForwardConstant {
-        @Override
-        public double getConstant(double input) {
-            return Math.sin(input) * f;
-        }
-    }
+    public static double target = 0;
 
-    public DcMotorEx armMotor;
-    // public AnalogInput enc;
+    public static int offset = -217;
+
+    public DcMotorEx arm_motor;
+    private AnalogInput encoder;
 
     public RunAction armLowBasket,armIntake,armSpecimen, armObservation,armObservationUp, armMax, armSpecimenScore, armClear, armUpright, autoArmPreSpecimen, autoArmSpecimen, autoArmSpecimen2;
 
-    public double armAngle() {
-        return (armMotor.getCurrentPosition() - armStart)/TICK_PER_RAD - ARM_OFF;
-    }
-
-    private PIDFController armPID = new PIDFController(PID);
-
     public Arm(HardwareMap hardwareMap) {
-        armMotor = hardwareMap.get(DcMotorEx.class, "arm");
-        // enc = hardwareMap.get(AnalogInput.class, "enc");
-        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armStart = armMotor.getCurrentPosition();
-        ARM_TARGET = armAngle();
+        controller = new PIDController(p, i, d);
+
+        arm_motor = hardwareMap.get(DcMotorEx.class, "arm");
+        arm_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        encoder = hardwareMap.get(AnalogInput.class, "enc");
+
+        target = getCurrentPosition();
 
         armLowBasket = new RunAction(this::armLowBasket);
         armIntake = new RunAction(this::armIntake);
@@ -58,37 +63,34 @@ public class Arm {
     }
 
     public void update() {
-        armPID.updateFeedForwardInput(armAngle());
-        armPID.setTargetPosition(ARM_TARGET);
-        armPID.updatePosition(armAngle());
-        armMotor.setPower(armPID.runPIDF());
+        controller.setPID(p, i, d);
+        double armPos = getCurrentPosition();
+        double pid = controller.calculate(armPos, target);
+        double ff = Math.sin(Math.toRadians(target)) * f;
+
+        double power = pid + ff;
+
+        arm_motor.setPower(power);
     }
 
-    public void setArmTarget(double target, double direction, boolean button) {
-        double currentDraw = armMotor.getCurrent(CurrentUnit.AMPS);
+    public double getCurrentPosition() {
+        return (encoder.getVoltage() / 3.2 * 360 + offset) % 360;
+    }
 
-        // If current exceeds the threshold, don't change the target to prevent damage
-        if (currentDraw > 1.5 && direction > 0 && !button) {
-            return; // Exit the method to prevent setting a new target
-        }
-        ARM_TARGET = target;
+    public void setArmTarget(double new_target, double direction) {
+        target = new_target;
     }
-    public void setArmTarget(double target) {
-        double currentDraw = armMotor.getCurrent(CurrentUnit.AMPS);
-        ARM_TARGET = target;
+    public void setArmTarget(double new_target) {
+        target = new_target;
     }
-    public double getArmCurrent() {return armMotor.getCurrent(CurrentUnit.AMPS);}
+    public double getArmCurrent() {return arm_motor.getCurrent(CurrentUnit.AMPS);}
 
     public double getArmTarget() {
-        return ARM_TARGET;
+        return target;
     }
-    public double getArmPos()  { return armMotor.getCurrentPosition(); }
 
     public void manual(double n) {
-        setArmTarget(ARM_TARGET + n * ARM_SPEED);
-    }
-    public void manual(double n, double direction, boolean button) {
-        setArmTarget(ARM_TARGET + n * ARM_SPEED, direction, button);
+        setArmTarget(target + n * ARM_SPEED);
     }
 
 
@@ -103,23 +105,11 @@ public class Arm {
     public void armSpecimenScore() {setArmTarget(ARM_SPECIMEN_SCORE);}
 
     public void armClear() {setArmTarget(ARM_CLEAR);}
-    public void armUpright() {setArmTarget(-1.67);}
-    public void autoArmPreSpecimen() {setArmTarget(-0.05);}
-    public void autoArmSpecimen() {setArmTarget(0.13);}
-    public void autoArmSpecimen2() {setArmTarget(-0.15);}
+    public void armUpright() {setArmTarget(-5);}
+    public void autoArmPreSpecimen() {setArmTarget(60);}
+    public void autoArmSpecimen() {setArmTarget(60);}
+    public void autoArmSpecimen2() {setArmTarget(55);}
 
-    public void resetEncoder() {
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armStart = armMotor.getCurrentPosition();
-        ARM_TARGET = armAngle();
-        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    public void scoreSpecimen() {
-        while (armMotor.getCurrent(CurrentUnit.AMPS) < 2) {
-            armMotor.setPower(-1);
-        }
-    }
 
 
 

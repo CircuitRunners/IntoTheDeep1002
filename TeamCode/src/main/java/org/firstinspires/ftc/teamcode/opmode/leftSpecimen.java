@@ -522,7 +522,7 @@ public class leftSpecimen extends OpMode{
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toRadians(follower.getPose().getHeading()));
         telemetry.addData("Arm Target", arm.getArmTarget());
-        telemetry.addData("Arm Pos", arm.armAngle());
+        telemetry.addData("Arm Pos", arm.getCurrentPosition());
         telemetry.addData("Diffy1 Position", "%.2f", endEffector.getDiffy1Position());
         telemetry.addData("Diffy2 Position", "%.2f", endEffector.getDiffy2Position());
         telemetry.update();

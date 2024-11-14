@@ -18,7 +18,7 @@ public class EndEffector {
     private final Servo diffy2;
 
     // TODO
-    public RunAction openClaw, closeClaw, diffyIdle, diffyInit, diffyIntakeH, diffyIntakeV, diffyIntakeAL, diffyIntakeAR, diffySpecimen, diffyBasket, diffyObs, diffyHang, diffyClear, diffyScore, autoPreSpecimen, autoSpecimen;
+    public RunAction openClaw, openClawAuto, closeClaw, diffyIdle, diffyInit, diffyIntakeH, diffyIntakeV, diffyIntakeAL, diffyIntakeAR, diffySpecimen, diffyBasket, diffyObs, diffyHang, diffyClear, diffyScore, autoPreSpecimen, autoSpecimen;
 
     public EndEffector(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, HWValues.CLAW);
@@ -27,6 +27,7 @@ public class EndEffector {
 
         openClaw = new RunAction(this::openClaw);
         closeClaw = new RunAction(this::closeClaw);
+        openClawAuto = new RunAction(this::openClawAuto);
 
         diffyIdle = new RunAction(this::idlePosition);
         diffyInit = new RunAction(this::initPosition);
@@ -59,14 +60,17 @@ public class EndEffector {
     }
 
     public void openClaw() {
-        claw.setPosition(0);
+        claw.setPosition(0.40);
     }
 
     public void closeClaw() {
         claw.setPosition(0.6);
     }
+    public void openClawAuto() {
+        claw.setPosition(0.3);
+    }
     public void switchClaw() {
-        if (claw.getPosition() < 0.50) {
+        if (claw.getPosition() < 0.6) {
             closeClaw();
         } else {
             openClaw();
