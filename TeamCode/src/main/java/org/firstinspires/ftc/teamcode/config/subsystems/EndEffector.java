@@ -92,8 +92,8 @@ public class EndEffector {
     }
 
     public void intakePositionH() {
-        diffy1.setPosition(0.39);
-        diffy2.setPosition(0.28);
+        diffy1.setPosition(0.36);
+        diffy2.setPosition(0.18);
     }
     public void intakePositionV() {
         diffy1.setPosition(0.44);
@@ -122,8 +122,8 @@ public class EndEffector {
         diffy2.setPosition(0.35);
     }
     public void obsPosition() {
-        diffy1.setPosition(0.49);
-        diffy2.setPosition(0.32);
+        diffy1.setPosition(0.45);
+        diffy2.setPosition(0.28);
     }
 
     public void hangPosition() {
