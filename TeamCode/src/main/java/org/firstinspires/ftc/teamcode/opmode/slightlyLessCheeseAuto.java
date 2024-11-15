@@ -28,13 +28,14 @@ public class slightlyLessCheeseAuto extends OpMode {
 
     // Define key poses (x, y, and heading values not set)
     private Pose startPos = new Pose(10, 43, Math.toRadians(180));
-    private Pose controlPointSample1Pos = new Pose(90, 24, Math.toRadians(180));
+    private Pose controlPointSample1Pos = new Pose(16.6, 32.5, Math.toRadians(180));
     private Pose controlPointSampleone2Pos = new Pose(93, 22, Math.toRadians(180));
-    private Pose behindSample1Pos = new Pose(50, 22, Math.toRadians(180));
+    private Pose behindSample1Pos = new Pose(67, 29, Math.toRadians(180));
+    private Pose ObsSample1ControlPoint1Pos = new Pose(93, 22, Math.toRadians(180));
     private Pose ObsSample1Pos = new Pose(12, 22, Math.toRadians(180));
     private Pose controlPointSample2Pos = new Pose(85, 16, Math.toRadians(0));
     private Pose behindSample2Pos = new Pose(50, 8, Math.toRadians(180));
-    private Pose ObsSample2Pos = new Pose(12, 10, Math.toRadians(180));
+    private Pose ObsSample2Pos = new Pose(12, 8, Math.toRadians(180));
     private Pose backPos = new Pose(20, 19, Math.toRadians(0));
     private Pose intakeObsPos = new Pose(8.8, 19, Math.toRadians(180));
 //    private Pose hangSpecimen1Pos = new Pose(64, 33, Math.toRadians(180));
@@ -50,7 +51,7 @@ public class slightlyLessCheeseAuto extends OpMode {
                 .setConstantHeadingInterpolation(behindSample1Pos.getHeading())
                 .build();
         pushSample1Path = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(behindSample1Pos), new Point(ObsSample1Pos)))
+                .addPath(new BezierCurve(new Point(behindSample1Pos), new Point(ObsSample1ControlPoint1Pos), new Point(ObsSample1Pos)))
                 .setConstantHeadingInterpolation(ObsSample1Pos.getHeading())
                 .build();
         behindSample2Path = follower.pathBuilder()
@@ -59,7 +60,7 @@ public class slightlyLessCheeseAuto extends OpMode {
                 .build();
 
         pushSample2Path = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(behindSample2Pos), new Point(ObsSample2Pos)))
+                .addPath(new BezierCurve(new Point(behindSample2Pos), new Point(ObsSample2Pos)))
                 .setConstantHeadingInterpolation(ObsSample2Pos.getHeading())
                 .build();
     }
@@ -149,7 +150,7 @@ public class slightlyLessCheeseAuto extends OpMode {
         endEffector = new EndEffector(hardwareMap);
         endEffector.closeClaw();
         endEffector.initPosition();
-        follower.setMaxPower(1);
+        follower.setMaxPower(.8);
         buildPaths();
     }
 
