@@ -245,7 +245,7 @@ public class cheeseAuto extends OpMode{
             case 5:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(arm.armMax);
-                    Actions.runBlocking(endEffector.diffyObs);
+                    Actions.runBlocking(endEffector.diffyIdle);
                     //Actions.runBlocking(endEffector.diffyIdle);
                     follower.followPath(cycleSpecimen1Lineup);
                     setPathState(6);
@@ -290,14 +290,13 @@ public class cheeseAuto extends OpMode{
             case 14:
                 if (!follower.isBusy()) {
                     follower.followPath(grabSpecimen);
-                    setPathState(112);
+                    // setPathState(112);
                 }
-                if (follower.getVelocity().getXComponent() == 0 ) {
+                if (follower.getVelocity().getXComponent() == 0 && pathTimer.getElapsedTimeSeconds() > 0.25) {
                     setPathState(112);
                 }
                 break;
             case 112:
-                Actions.runBlocking(new SleepAction(.25));
                 Actions.runBlocking(endEffector.closeClaw);
                 setPathState(15);
                 break;
@@ -332,12 +331,6 @@ public class cheeseAuto extends OpMode{
                     Actions.runBlocking(new SleepAction(0.5));
                     Actions.runBlocking(arm.armObservation);
                     Actions.runBlocking(endEffector.diffyObs);
-                    setPathState(21);
-                }
-                break;
-            case 420:
-                if (pathTimer.getElapsedTimeSeconds() > 2) {
-
                     setPathState(21);
                 }
                 break;
