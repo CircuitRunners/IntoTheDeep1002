@@ -32,7 +32,7 @@ public class RobotConstants {
     public static double ARM_INTAKE = -111;
     public static double ARM_CLEAR = -100;
     public static double ARM_SPECIMEN = -30;
-    public static double ARM_SPECIMEN_SCORE = -30;
+    public static double ARM_SPECIMEN_SCORE = -54;
     public static double ARM_OBSERVATION = 97;
     public static double kP = 3;
     public static double kI = 0.02;
