@@ -42,7 +42,7 @@ public class slightlyLessCheeseAuto extends OpMode {
     private Pose lineUpSpecimen1Pos = new Pose(30, 66, Math.toRadians(180));
     private Pose scoreSpecimen1Pos = new Pose(47, 65, Math.toRadians(180));
     private Pose scoreSlide = new Pose(45,71, Math.toRadians(180));
-    private Pose intakeSpecimen2 = new Pose(25,19,Math.toRadians(0));
+    private Pose intakeSpecimen2 = new Pose(35,19,Math.toRadians(0));
 //    private Pose hangSpecimen2Pos = new Pose(64, 33, Math.toRadians(180));
 //    private Pose hangSpecimen3Pos = new Pose(64, 33, Math.toRadians(180));
 //    private Pose hangSpecimen4Pos = new Pose(64, 33, Math.toRadians(180));
@@ -193,7 +193,6 @@ public class slightlyLessCheeseAuto extends OpMode {
             case 12:
                 if (!follower.isBusy()) {
                    Actions.runBlocking(endEffector.openClaw);
-
                     follower.followPath(driveToObsPath);
                     Actions.runBlocking(new SleepAction(1));
                     setPathState(69);
@@ -201,8 +200,8 @@ public class slightlyLessCheeseAuto extends OpMode {
                 break;
             case 69:
                 if  (!follower.isBusy()) {
-                    Actions.runBlocking(arm.autoArmIntake2);
                     Actions.runBlocking(endEffector.diffyWall2);
+                    Actions.runBlocking(arm.autoArmIntake2);
                     follower.followPath(intakeSPecimen2);
                     Actions.runBlocking(new SleepAction(1));
                     setPathState(13);

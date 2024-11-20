@@ -112,7 +112,7 @@ public class Arm {
     public void autoArmPreSpecimen() {setArmTarget(55);}
     public void autoArmSpecimen() {setArmTarget(60);}
     public void autoArmSpecimen2() {setArmTarget(55);}
-   public void autoArmIntake2(){setArmTarget(-97);}
+   public void autoArmIntake2(){setArmTarget(-87);}
 
 
 
