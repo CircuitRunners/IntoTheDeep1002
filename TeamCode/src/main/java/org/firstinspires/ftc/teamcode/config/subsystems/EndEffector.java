@@ -18,7 +18,7 @@ public class EndEffector {
     private final Servo diffy2;
 
     // TODO
-    public RunAction openClaw, openClawAuto, closeClaw, diffyIdle, diffyInit, diffyIntakeH, diffyIntakeV, diffyIntakeAL, diffyIntakeAR, diffySpecimen, diffyBasket, diffyObs, diffyHang, diffyClear, diffyScore, autoPreSpecimen, autoSpecimen, diffyWall;
+    public RunAction diffyWall2,openClaw, openClawAuto, closeClaw, diffyIdle, diffyInit, diffyIntakeH, diffyIntakeV, diffyIntakeAL, diffyIntakeAR, diffySpecimen, diffyBasket, diffyObs, diffyHang, diffyClear, diffyScore, autoPreSpecimen, autoSpecimen, diffyWall;
 
     public EndEffector(HardwareMap hardwareMap) {
         claw = hardwareMap.get(Servo.class, HWValues.CLAW);
@@ -44,6 +44,7 @@ public class EndEffector {
         autoPreSpecimen = new RunAction(this::autoPreSpecimen);
         autoSpecimen = new RunAction(this::autoSpecimen);
         diffyWall = new RunAction(this::diffyWall);
+        diffyWall2 = new RunAction(this::diffyWall2);
 
        // openClaw();
         //idlePosition();
@@ -138,8 +139,8 @@ public class EndEffector {
 //    }
 
     public void autoSpecimen() {
-        diffy1.setPosition(0.39);
-        diffy2.setPosition(0.22);
+        diffy1.setPosition(0.47);
+        diffy2.setPosition(0.3);
 
     }
 
@@ -150,8 +151,13 @@ public class EndEffector {
 
     public void diffyWall(){
         diffy1.setPosition(0.53);
-        diffy2.setPosition(0.32);
+        diffy2.setPosition(0.36);
     }
+    public void diffyWall2(){
+        diffy1.setPosition(0.55);
+        diffy2.setPosition(0.38);
+    }
+
 
     public void diffy1Set(double n){
         diffy1.setPosition(n);
