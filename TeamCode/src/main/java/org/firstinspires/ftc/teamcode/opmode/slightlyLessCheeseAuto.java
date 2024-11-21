@@ -32,7 +32,7 @@ public class slightlyLessCheeseAuto extends OpMode {
     private Pose controlPointSampleone2Pos = new Pose(93, 22, Math.toRadians(180));
     private Pose behindSample1Pos = new Pose(67, 29, Math.toRadians(180));
     private Pose ObsSample1ControlPoint1Pos = new Pose(93, 22, Math.toRadians(180));
-    private Pose ObsSample1Pos = new Pose(14, 17, Math.toRadians(180));
+    private Pose ObsSample1Pos = new Pose(14, 16, Math.toRadians(180));
     private Pose controlPointSample2Pos = new Pose(85, 26, Math.toRadians(0));
     private Pose behindSample2Pos = new Pose(65, 12, Math.toRadians(180));
     private Pose ObsSample2Pos = new Pose(14, 12, Math.toRadians(180));
@@ -43,12 +43,13 @@ public class slightlyLessCheeseAuto extends OpMode {
     private Pose scoreSpecimen1Pos = new Pose(47, 65, Math.toRadians(180));
     private Pose scoreSlide = new Pose(45,71, Math.toRadians(180));
     private Pose intakeSpecimen2 = new Pose(35,19,Math.toRadians(0));
+    private Pose mergePos = new Pose(35, 45, Math.toRadians(180));
 //    private Pose hangSpecimen2Pos = new Pose(64, 33, Math.toRadians(180));
 //    private Pose hangSpecimen3Pos = new Pose(64, 33, Math.toRadians(180));
 //    private Pose hangSpecimen4Pos = new Pose(64, 33, Math.toRadians(180));
 //    private Pose parkPos = new Pose(64, 33, Math.toRadians(180));
 
-    private PathChain intakeSPecimen2,behindSample1Path, pushSample1Path, behindSample2Path, pushSample2Path, backPath, turnPath, intakeObs1Path, lineUpSpecimen1Path, scoreSpecimen1Path,slidePath, driveToObsPath,intakeObs2Path, hangSpecimen2Path, intakeObs3Path, hangSpecimen3Path, intakeObs4Path, hangSpecimen4Path, parkPath;
+    private PathChain behindSample1Path, pushSample1Path, behindSample2Path, pushSample2Path, backPath, turnPath, intakeObs1Path, lineUpSpecimen1Path, scoreSpecimen1Path, slidePath, driveToObsPath, intakeSpecimen2Path, mergePath, hangSpecimen2Path, intakeObs3Path, hangSpecimen3Path, intakeObs4Path, hangSpecimen4Path, parkPath;
     public void buildPaths() {
         behindSample1Path = follower.pathBuilder()
                 .addPath(new BezierCurve(new Point(startPos), new Point(controlPointSample1Pos), new Point(behindSample1Pos)))
@@ -95,11 +96,16 @@ public class slightlyLessCheeseAuto extends OpMode {
                 .addPath(new BezierLine(new Point(scoreSlide), new Point(turnPos)))
                 .setConstantHeadingInterpolation(scoreSlide.getHeading())
                 .build();
-        intakeSPecimen2 = follower.pathBuilder()
+        intakeSpecimen2Path = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(turnPos), new Point(intakeSpecimen2)))
                 .setConstantHeadingInterpolation(scoreSlide.getHeading())
                 .build();
-
+        mergePath = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(scoreSlide), new Point(mergePos)))
+                .setConstantHeadingInterpolation(scoreSlide.getHeading())
+                .addPath(new BezierLine(new Point(mergePos), new Point(turnPos)))
+                .setConstantHeadingInterpolation(turnPos.getHeading())
+                .build();
 
     }
 
@@ -121,16 +127,13 @@ public class slightlyLessCheeseAuto extends OpMode {
                 if (!follower.isBusy()) {
                     follower.followPath(pushSample1Path);
              //       Actions.runBlocking(new SleepAction(1));
-                 //   follower.setMaxPower(1);
                     setPathState(3);
                 }
                 break;
             case 3:
                 if (!follower.isBusy()) {
-                   // follower.setMaxPower(0.4);
                     follower.followPath(behindSample2Path);
              //       Actions.runBlocking(new SleepAction(1));
-                  //  follower.setMaxPower(0.8);
                     setPathState(4);
                 }
                 break;
@@ -181,7 +184,6 @@ public class slightlyLessCheeseAuto extends OpMode {
                     setPathState(11);
                 }
                 break;
-
             case 11:
                 if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(slidePath);
@@ -189,24 +191,23 @@ public class slightlyLessCheeseAuto extends OpMode {
                     setPathState(12);
                 }
                 break;
-
             case 12:
-                if (!follower.isBusy()) {
-                   Actions.runBlocking(endEffector.openClaw);
-                    follower.followPath(driveToObsPath);
+                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                    Actions.runBlocking(endEffector.openClaw);
+                    follower.followPath(mergePath);
                     Actions.runBlocking(new SleepAction(1));
                     setPathState(69);
                 }
                 break;
             case 69:
                 if  (!follower.isBusy()) {
-                    Actions.runBlocking(endEffector.diffyWall2);
-                    Actions.runBlocking(arm.autoArmIntake2);
-                    follower.followPath(intakeSPecimen2);
+                    Actions.runBlocking(arm.armWallIntakeFinal);
+                    Actions.runBlocking(endEffector.diffyWall);
+                    follower.followPath(intakeObs1Path);
                     Actions.runBlocking(new SleepAction(1));
                     setPathState(13);
-            }
-            break;
+                }
+                break;
             case 13:
                 if (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
                     Actions.runBlocking(endEffector.closeClaw);
@@ -224,8 +225,48 @@ public class slightlyLessCheeseAuto extends OpMode {
                     setPathState(15);
                 }
                 break;
-
             case 15:
+                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                    follower.followPath(slidePath);
+                    Actions.runBlocking(new SleepAction(1));
+                    setPathState(16);
+                }
+                break;
+            case 16:
+                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                    Actions.runBlocking(endEffector.openClaw);
+                    follower.followPath(mergePath);
+                    Actions.runBlocking(new SleepAction(1));
+                    setPathState(17);
+                }
+                break;
+            case 17:
+                if  (!follower.isBusy()) {
+                    Actions.runBlocking(arm.armWallIntakeFinal);
+                    Actions.runBlocking(endEffector.diffyWall);
+                    follower.followPath(intakeObs1Path);
+                    Actions.runBlocking(new SleepAction(1));
+                    setPathState(18);
+                }
+                break;
+            case 18:
+                if (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                    Actions.runBlocking(endEffector.closeClaw);
+                    follower.followPath(lineUpSpecimen1Path);
+                    Actions.runBlocking(arm.autoArmPreSpecimen);
+                    Actions.runBlocking(new SleepAction(1));
+                    setPathState(19);
+                }
+                break;
+            case 19:
+                if (!follower.isBusy()) {
+                    Actions.runBlocking(endEffector.autoSpecimen);
+                    follower.followPath(scoreSpecimen1Path);
+                    Actions.runBlocking(new SleepAction(1));
+                    setPathState(20);
+                }
+                break;
+            case 20:
                 if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(slidePath);
                     Actions.runBlocking(new SleepAction(1));
