@@ -66,7 +66,7 @@ public class EndEffector {
     }
 
     public void closeClaw() {
-        claw.setPosition(0.6);
+        claw.setPosition(0.7);
     }
     public void openClawAuto() {
         claw.setPosition(0.3);

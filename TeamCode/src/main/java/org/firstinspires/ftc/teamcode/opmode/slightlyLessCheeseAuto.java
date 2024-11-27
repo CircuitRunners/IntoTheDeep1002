@@ -30,18 +30,18 @@ public class slightlyLessCheeseAuto extends OpMode {
     // Define key poses (x, y, and heading values not set)
     private Pose startPos = new Pose(10, 43, Math.toRadians(180));
     private Pose controlPointSample1Pos = new Pose(16.6, 32.5, Math.toRadians(180));
-    private Pose controlPointSampleone2Pos = new Pose(93, 22, Math.toRadians(180));
+    private Pose controlPointSampleone2Pos = new Pose(93, 20, Math.toRadians(180));
     private Pose behindSample1Pos = new Pose(67, 29, Math.toRadians(180));
     private Pose ObsSample1ControlPoint1Pos = new Pose(93, 22, Math.toRadians(180));
-    private Pose ObsSample1Pos = new Pose(14, 16, Math.toRadians(180));
+    private Pose ObsSample1Pos = new Pose(15, 16, Math.toRadians(180));
     private Pose controlPointSample2Pos = new Pose(85, 26, Math.toRadians(0));
     private Pose behindSample2Pos = new Pose(65, 12, Math.toRadians(180));
-    private Pose ObsSample2Pos = new Pose(14, 12, Math.toRadians(180));
+    private Pose ObsSample2Pos = new Pose(15, 12, Math.toRadians(180));
     private Pose backPos = new Pose(25, 12, Math.toRadians(180));
     private Pose turnPos = new Pose (23,19,Math.toRadians(0));
     private Pose intakeObsPos = new Pose(15, 19, Math.toRadians(0));
     private Pose lineUpSpecimen1Pos = new Pose(30, 66, Math.toRadians(180));
-    private Pose scoreSpecimen1Pos = new Pose(48, 65, Math.toRadians(180));
+    private Pose scoreSpecimen1Pos = new Pose(50, 65, Math.toRadians(180));
     private Pose scoreSlide = new Pose(45,71, Math.toRadians(180));
     private Pose intakeSpecimen2 = new Pose(35,19,Math.toRadians(0));
     private Pose mergePos = new Pose(30, 50, Math.toRadians(180));
@@ -154,26 +154,36 @@ public class slightlyLessCheeseAuto extends OpMode {
                 break;
             case 6:
                 if (!follower.isBusy()) {
+                    Actions.runBlocking(arm.armWallIntakeFinal);
                     follower.followPath(turnPath);
-               //     Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(7);
                 }
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(arm.armWallIntakeFinal);
                     Actions.runBlocking(endEffector.diffyWall);
+                    Actions.runBlocking(arm.armWallIntakeFinal);
                     follower.followPath(intakeObs1Path);
-                    Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(8);
                 }
                 break;
             case 8:
-                if (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
                     Actions.runBlocking(endEffector.closeClaw);
+                    //follower.followPath(lineUpSpecimen1Path);
+                    //Actions.runBlocking(arm.autoArmPreSpecimen);
+                    //    Actions.runBlocking(new SleepAction(1));
+                    setPathState(80);
+                }
+                break;
+            case 80:
+                if (!follower.isBusy()){  //|| pathTimer.getElapsedTimeSeconds() > 1) {
+                    //Actions.runBlocking(endEffector.closeClaw);
                     follower.followPath(lineUpSpecimen1Path);
                     Actions.runBlocking(arm.autoArmPreSpecimen);
-                    Actions.runBlocking(new SleepAction(1));
+                    //    Actions.runBlocking(new SleepAction(1));
                     setPathState(9);
                 }
                 break;
@@ -181,23 +191,23 @@ public class slightlyLessCheeseAuto extends OpMode {
                 if (!follower.isBusy()) {
                     Actions.runBlocking(endEffector.autoSpecimen);
                     follower.followPath(scoreSpecimen1Path);
-                    Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(11);
                 }
                 break;
             case 11: //scored specimen 1
                 if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(slidePath);
-                    Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(12);
                 }
                 break;
             case 12:
-                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                if  (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
                     Actions.runBlocking(endEffector.openClaw);
                     Actions.runBlocking(arm.autoArmSpecimenDown);
                     follower.followPath(mergePath);
-                    Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(69);
                 }
                 break;
@@ -205,23 +215,26 @@ public class slightlyLessCheeseAuto extends OpMode {
                 if  (!follower.isBusy()) {
                     Actions.runBlocking(arm.armWallIntakeFinal);
                     Actions.runBlocking(endEffector.diffyWall);
-                    Actions.runBlocking(new SleepAction(1));
-                    setPathState(70);
-                }
-                break;
-            case 70:
-                if  (!follower.isBusy()) {
                     follower.followPath(intakeObs1Path);
-                    Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(13);
                 }
                 break;
             case 13:
-                if (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
+                    Actions.runBlocking(arm.armWallIntakeFinal);
                     Actions.runBlocking(endEffector.closeClaw);
+                    //follower.followPath(lineUpSpecimen1Path);
+                    //Actions.runBlocking(arm.autoArmPreSpecimen);
+                    //    Actions.runBlocking(new SleepAction(1));
+                    setPathState(81);
+                }
+                break;
+            case 81:
+                if (!follower.isBusy()){  //|| pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(lineUpSpecimen1Path);
                     Actions.runBlocking(arm.autoArmPreSpecimen);
-                    Actions.runBlocking(new SleepAction(1));
+                    //    Actions.runBlocking(new SleepAction(1));
                     setPathState(14);
                 }
                 break;
@@ -229,14 +242,14 @@ public class slightlyLessCheeseAuto extends OpMode {
                 if (!follower.isBusy()) {
                     Actions.runBlocking(endEffector.autoSpecimen);
                     follower.followPath(scoreSpecimen1Path);
-                    Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(15);
                 }
                 break;
             case 15: //scored specimen 2
-                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                if  (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(slidePath);
-                    Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(16);
                 }
                 break;
@@ -245,7 +258,7 @@ public class slightlyLessCheeseAuto extends OpMode {
                     Actions.runBlocking(endEffector.openClaw);
                     Actions.runBlocking(arm.autoArmSpecimenDown);
                     follower.followPath(mergePath);
-                    Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(17);
                 }
                 break;
@@ -253,23 +266,25 @@ public class slightlyLessCheeseAuto extends OpMode {
                 if  (!follower.isBusy()) {
                     Actions.runBlocking(arm.armWallIntakeFinal);
                     Actions.runBlocking(endEffector.diffyWall);
-                    Actions.runBlocking(new SleepAction(1));
-                    setPathState(71);
-                }
-                break;
-            case 71:
-                if  (!follower.isBusy()) {
                     follower.followPath(intakeObs1Path);
                     Actions.runBlocking(new SleepAction(1));
                     setPathState(18);
                 }
                 break;
             case 18:
-                if (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
                     Actions.runBlocking(endEffector.closeClaw);
+                    //follower.followPath(lineUpSpecimen1Path);
+                    //Actions.runBlocking(arm.autoArmPreSpecimen);
+                    //    Actions.runBlocking(new SleepAction(1));
+                    setPathState(82);
+                }
+                break;
+            case 82:
+                if (!follower.isBusy()){  //|| pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(lineUpSpecimen1Path);
                     Actions.runBlocking(arm.autoArmPreSpecimen);
-                    Actions.runBlocking(new SleepAction(1));
+                    //    Actions.runBlocking(new SleepAction(1));
                     setPathState(19);
                 }
                 break;
@@ -277,14 +292,14 @@ public class slightlyLessCheeseAuto extends OpMode {
                 if (!follower.isBusy()) {
                     Actions.runBlocking(endEffector.autoSpecimen);
                     follower.followPath(scoreSpecimen1Path);
-                    Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(20);
                 }
                 break;
             case 20: //scored specimen 3
                 if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(slidePath);
-                    Actions.runBlocking(new SleepAction(1));
+                //    Actions.runBlocking(new SleepAction(1));
                     setPathState(21);
                 }
                 break;
@@ -344,7 +359,7 @@ public class slightlyLessCheeseAuto extends OpMode {
         follower.setStartingPose(startPos);
         arm = new Arm(hardwareMap);
         endEffector = new EndEffector(hardwareMap);
-        endEffector.openClaw();
+        endEffector.closeClaw();
         endEffector.initPosition();
         follower.setMaxPower(0.85);
         buildPaths();
