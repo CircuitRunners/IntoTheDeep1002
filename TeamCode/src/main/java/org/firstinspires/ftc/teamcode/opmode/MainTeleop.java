@@ -55,7 +55,7 @@ public class MainTeleop extends OpMode {
         // encoder = hardwareMap.get(AnalogInput.class, "enc");
         arm = new Arm(hardwareMap);
         endEffector = new EndEffector(hardwareMap);
-        drive.init(hardwareMap);
+
         sparkfunOTOS = hardwareMap.get(SparkFunOTOS.class, HWValues.OTOS);
         configureOTOS();
         telemetry.addLine("Ready!");
