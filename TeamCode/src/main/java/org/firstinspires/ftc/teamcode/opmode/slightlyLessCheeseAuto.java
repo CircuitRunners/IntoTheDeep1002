@@ -43,7 +43,7 @@ public class slightlyLessCheeseAuto extends OpMode {
     private Pose intakeObsPos2 = new Pose(15, 19, Math.toRadians(0));
     private Pose lineUpSpecimen1Pos = new Pose(30, 66, Math.toRadians(180));
     private Pose scoreSpecimen1Pos = new Pose(50, 65, Math.toRadians(180));
-    private Pose scoreSlide = new Pose(45,71, Math.toRadians(180));
+    private Pose scoreSlide = new Pose(42,69, Math.toRadians(180));
     private Pose intakeSpecimen2 = new Pose(35,19,Math.toRadians(0));
     private Pose mergePos = new Pose(30, 50, Math.toRadians(180));
     private Pose parkPos = new Pose(15, 30, Math.toRadians(180));
@@ -171,7 +171,7 @@ public class slightlyLessCheeseAuto extends OpMode {
                 }
                 break;
             case 8:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 0.7) {
                     Actions.runBlocking(endEffector.closeClaw);
                     //follower.followPath(lineUpSpecimen1Path);
                     //Actions.runBlocking(arm.autoArmPreSpecimen);
@@ -180,7 +180,7 @@ public class slightlyLessCheeseAuto extends OpMode {
                 }
                 break;
             case 80:
-                if (!follower.isBusy()){  //|| pathTimer.getElapsedTimeSeconds() > 1) {
+                if (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 0.1) {
                     //Actions.runBlocking(endEffector.closeClaw);
                     follower.followPath(lineUpSpecimen1Path);
                     Actions.runBlocking(arm.autoArmPreSpecimen);
@@ -197,14 +197,14 @@ public class slightlyLessCheeseAuto extends OpMode {
                 }
                 break;
             case 11: //scored specimen 1
-                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 0.5) {
                     follower.followPath(slidePath);
                 //    Actions.runBlocking(new SleepAction(1));
                     setPathState(12);
                 }
                 break;
             case 12:
-                if  (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
+                if  (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 0.5) {
                     Actions.runBlocking(endEffector.openClaw);
                   //  Actions.runBlocking(arm.autoArmSpecimenDown);
                     follower.followPath(mergePath);
@@ -223,8 +223,7 @@ public class slightlyLessCheeseAuto extends OpMode {
                 }
                 break;
             case 13:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
-
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 0.7) {
                     Actions.runBlocking(endEffector.closeClaw);
                     //follower.followPath(lineUpSpecimen1Path);
                     //Actions.runBlocking(arm.autoArmPreSpecimen);
@@ -233,7 +232,7 @@ public class slightlyLessCheeseAuto extends OpMode {
                 }
                 break;
             case 81:
-                if (!follower.isBusy()){  //|| pathTimer.getElapsedTimeSeconds() > 1) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 0.1) {
                     follower.followPath(lineUpSpecimen1Path);
                     Actions.runBlocking(arm.autoArmPreSpecimen);
                     //    Actions.runBlocking(new SleepAction(1));
@@ -249,14 +248,14 @@ public class slightlyLessCheeseAuto extends OpMode {
                 }
                 break;
             case 15: //scored specimen 2
-                if  (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
+                if  (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 0.5) {
                     follower.followPath(slidePath);
                 //    Actions.runBlocking(new SleepAction(1));
                     setPathState(16);
                 }
                 break;
             case 16:
-                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 0.5) {
                     Actions.runBlocking(endEffector.openClaw);
                  //   Actions.runBlocking(arm.autoArmSpecimenDown);
                     follower.followPath(mergePath);
@@ -275,7 +274,7 @@ public class slightlyLessCheeseAuto extends OpMode {
                 }
                 break;
             case 18:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 1) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 0.7) {
                     Actions.runBlocking(endEffector.closeClaw);
                     //follower.followPath(lineUpSpecimen1Path);
                     //Actions.runBlocking(arm.autoArmPreSpecimen);
@@ -284,7 +283,7 @@ public class slightlyLessCheeseAuto extends OpMode {
                 }
                 break;
             case 82:
-                if (!follower.isBusy()){  //|| pathTimer.getElapsedTimeSeconds() > 1) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 0.1) {
                     follower.followPath(lineUpSpecimen1Path);
                     Actions.runBlocking(arm.autoArmPreSpecimen);
                     //    Actions.runBlocking(new SleepAction(1));
@@ -300,14 +299,14 @@ public class slightlyLessCheeseAuto extends OpMode {
                 }
                 break;
             case 20: //scored specimen 3
-                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 0.5) {
                     follower.followPath(slidePath);
                 //    Actions.runBlocking(new SleepAction(1));
                     setPathState(21);
                 }
                 break;
             case 21:
-                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 1) {
+                if  (!follower.isBusy()  || pathTimer.getElapsedTimeSeconds() > 0.5) {
                     Actions.runBlocking(endEffector.openClaw);
                     Actions.runBlocking(arm.autoArmSpecimenDown);
                     follower.followPath(parkPath);
