@@ -37,7 +37,7 @@ public class Arm {
     public DcMotorEx arm_motor;
     private AnalogInput encoder;
 
-    public RunAction  autoArmIntake2 , armLowBasket,armIntake,armSpecimen, armObservation,armObservationUp, armMax, armSpecimenScore, armClear, armUpright, autoArmPreSpecimen, autoArmSpecimenDown, autoArmSpecimen2, armWallIntakeFinal;
+    public RunAction  autoArmIntake2 , armLowBasket,armIntake,armSpecimen, armObservation,armObservationUp, armMax, armSpecimenScore, armClear, armUpright, autoArmPreSpecimen, autoArmSpecimenDown, autoArmSpecimen2, armIntermediate, armWallIntakeFinal;
 
     public Arm(HardwareMap hardwareMap) {
         controller = new PIDController(p, i, d);
@@ -62,6 +62,7 @@ public class Arm {
         autoArmSpecimen2 = new RunAction(this::autoArmSpecimen2);
         armWallIntakeFinal = new RunAction(this::armWallIntakeFinal);
         autoArmIntake2 = new RunAction(this::autoArmIntake2);
+        armIntermediate = new RunAction(this::autoArmIntermediate);
     }
 
     public void update() {
@@ -103,6 +104,7 @@ public class Arm {
     }
     public void armObservation() {setArmTarget(ARM_OBSERVATION);}
     public void armWallIntakeFinal() {setArmTarget(90);}
+    public void autoArmIntermediate() {setArmTarget(70);}
     public void armObservationUp() {setArmTarget(0.9);}
     public void armMax() {setArmTarget(ARM_MAX);}
     public void armSpecimenScore() {setArmTarget(ARM_SPECIMEN_SCORE);}
