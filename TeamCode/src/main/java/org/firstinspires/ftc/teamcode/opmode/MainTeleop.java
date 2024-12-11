@@ -47,12 +47,17 @@ public class MainTeleop extends OpMode {
     // private AnalogInput encoder;
     // AnalogInput
 
+
+
     @Override
+
     public void init() {
         telemetry.addLine("Initializing...");
         telemetry.update();
 
         // encoder = hardwareMap.get(AnalogInput.class, "enc");
+        drive.init(hardwareMap);
+
         arm = new Arm(hardwareMap);
         endEffector = new EndEffector(hardwareMap);
 
