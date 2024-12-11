@@ -66,7 +66,7 @@ public class EndEffector {
     }
 
     public void closeClaw() {
-        claw.setPosition(0.7);
+        claw.setPosition(0.95);
     }
     public void openClawAuto() {
         claw.setPosition(0.3);
@@ -139,7 +139,7 @@ public class EndEffector {
 //    }
 
     public void autoSpecimen() {
-        diffy1.setPosition(0.47);
+        diffy1.setPosition(0.46);
         diffy2.setPosition(0.3);
 
     }
