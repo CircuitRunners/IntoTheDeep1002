@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 @Config
 public class Arm {
     private PIDController controller;
-    public static double p =0.05, i = 0, d = 0.002;
+    public static double p =0.05, i = 0, d = 0.0005;
     public static double f = 0;
 
     public static double target = 0;
@@ -111,7 +111,7 @@ public class Arm {
 
     public void armClear() {setArmTarget(ARM_CLEAR);}
     public void armUpright() {setArmTarget(-5);}
-    public void autoArmPreSpecimen() {setArmTarget(55);}
+    public void autoArmPreSpecimen() {setArmTarget(60);}
     public void autoArmSpecimen() {setArmTarget(65);}
     public void autoArmSpecimen2() {setArmTarget(55);}
    public void autoArmIntake2(){setArmTarget(-90);}

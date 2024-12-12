@@ -66,10 +66,10 @@ public class EndEffector {
     }
 
     public void closeClaw() {
-        claw.setPosition(0.95);
+        claw.setPosition(0.9);
     }
     public void openClawAuto() {
-        claw.setPosition(0.3);
+        claw.setPosition(0.2);
     }
     public void switchClaw() {
         if (claw.getPosition() < 0.6) {
@@ -139,7 +139,7 @@ public class EndEffector {
 //    }
 
     public void autoSpecimen() {
-        diffy1.setPosition(0.46);
+        diffy1.setPosition(0.45);
         diffy2.setPosition(0.3);
 
     }
@@ -151,7 +151,7 @@ public class EndEffector {
 
     public void diffyWall(){
         diffy1.setPosition(0.53);
-        diffy2.setPosition(0.36);
+        diffy2.setPosition(0.40);
     }
     public void diffyWall2(){
         diffy1.setPosition(0.55);
