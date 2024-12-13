@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.config.util.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
 
 
-@Autonomous
+@Autonomous (name = "z-leftspecimen")
 public class leftSpecimen extends OpMode{
     private Follower follower;
     private Timer pathTimer;

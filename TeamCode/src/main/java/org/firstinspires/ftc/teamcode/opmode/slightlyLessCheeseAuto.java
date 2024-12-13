@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.config.util.action.Action;
 import org.firstinspires.ftc.teamcode.config.util.action.Actions;
 import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
 
-@Autonomous (name = "Gortimus Maximus Cheese Auto")
+@Autonomous (name = "lm3 cooking trust")
 public class slightlyLessCheeseAuto extends OpMode {
 
     private Follower follower;
@@ -156,7 +156,8 @@ public class slightlyLessCheeseAuto extends OpMode {
             case 6:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(endEffector.openClaw);
-                    Actions.runBlocking(arm.armWallIntakeFinal);
+                    Actions.runBlocking(endEffector.diffyWall);
+                    Actions.runBlocking(arm.armIntermediate);
                     follower.followPath(turnPath);
                 //    Actions.runBlocking(new SleepAction(1));
                     setPathState(7);
@@ -164,8 +165,8 @@ public class slightlyLessCheeseAuto extends OpMode {
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(endEffector.diffyWall);
                     Actions.runBlocking(arm.armWallIntakeFinal);
+                    Actions.runBlocking(endEffector.diffyWall);
                     follower.followPath(intakeObs1Path);
                 //    Actions.runBlocking(new SleepAction(1));
                     setPathState(8);
@@ -299,7 +300,7 @@ public class slightlyLessCheeseAuto extends OpMode {
 
                     follower.followPath(scoreSpecimen1Path);
                 //    Actions.runBlocking(new SleepAction(1));
-                    setPathState(20);
+                    setPathState(21);
                 }
                 break;
             case 20: //scored specimen 3
@@ -322,10 +323,10 @@ public class slightlyLessCheeseAuto extends OpMode {
                     Actions.runBlocking(arm.armObservation);
                     Actions.runBlocking(endEffector.diffyInit);
                     Actions.runBlocking(endEffector.closeClaw);
-                    setPathState(100);
+                    setPathState(420);
                 }
                 break;
-            case 100:
+            case 420:
                 if (!follower.isBusy()) {
                     setPathState(-1);
                 }

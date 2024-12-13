@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.PathCha
 import org.firstinspires.ftc.teamcode.config.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.config.pedroPathing.util.Timer;
 
-@Autonomous
+@Autonomous (name = "z-leftpark")
 public class leftPark extends OpMode{
     private Follower follower;
     private Timer pathTimer;

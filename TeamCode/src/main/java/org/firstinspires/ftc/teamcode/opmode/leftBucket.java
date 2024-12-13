@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode;
 
+import static org.firstinspires.ftc.teamcode.config.util.RobotConstants.ARM_SPECIMEN_SCORE;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -18,7 +20,7 @@ import org.firstinspires.ftc.teamcode.config.util.action.SequentialAction;
 import org.firstinspires.ftc.teamcode.config.util.action.SleepAction;
 
 
-@Autonomous
+@Autonomous (name = "lowBucketAuto")
 public class leftBucket extends OpMode{
     private Follower follower;
     private Timer pathTimer;
@@ -30,10 +32,10 @@ public class leftBucket extends OpMode{
     // Define key poses
     private Pose startPosition = new Pose(7.5, 80, Math.toRadians(180));
     private Pose bucketClear = new Pose(20, 110, Math.toRadians(315));
-    private Pose bucketPos = new Pose(6.2, 125,Math.toRadians(315));
+    private Pose bucketPos = new Pose(6.3, 127,Math.toRadians(315));
     private Pose preprePark = new Pose(7,105,Math.toRadians(0));
-    private Pose prePark = new Pose(48,105,Math.toRadians(270));
-    private Pose parkPos = new Pose(55, 102, Math.toRadians(270));
+    private Pose prePark = new Pose(48,105,Math.toRadians(90));
+    private Pose parkPos = new Pose(55, 99, Math.toRadians(90));
 
 
     private PathChain basketClear, score, park;
@@ -88,21 +90,23 @@ public class leftBucket extends OpMode{
                 break;
             case 4:
               if (!follower.isBusy()) {
+                  Actions.runBlocking(endEffector.scoreBucketDiffy);
                   Actions.runBlocking(endEffector.openClaw);
                   setPathState(5);
               }
               break;
             case 5:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(resetArm());
+                    //Actions.runBlocking(resetArm());
                     follower.followPath(park);
                     setPathState(6);
                 }
                 break;
             case 6:
                 if (!follower.isBusy()) {
-                    Actions.runBlocking(arm.armSpecimenScore);
-                    Actions.runBlocking(new SleepAction(5));
+                   Actions.runBlocking(arm.armSpecimenScore);
+                   Actions.runBlocking(new SleepAction(3));
+
                     setPathState(7);
                 }
             case 7:
@@ -132,6 +136,10 @@ public class leftBucket extends OpMode{
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", Math.toRadians(follower.getPose().getHeading()));
+        telemetry.addData("Arm Target", arm.getArmTarget());
+        telemetry.addData("Arm Pos", arm.getCurrentPosition());
+        telemetry.addData("Diffy1 Position", "%.2f", endEffector.getDiffy1Position());
+        telemetry.addData("Diffy2 Position", "%.2f", endEffector.getDiffy2Position());
         telemetry.update();
     }
 
@@ -143,7 +151,8 @@ public class leftBucket extends OpMode{
         arm = new Arm(hardwareMap);
         endEffector = new EndEffector(hardwareMap);
         endEffector.closeClaw();
-        endEffector.idlePosition();
+        endEffector.initPosition();
+        follower.setMaxPower(1);
         buildPaths();
     }
 
@@ -151,17 +160,6 @@ public class leftBucket extends OpMode{
     public void start() {
         pathTimer.resetTimer();
         setPathState(0);
-    }
-
-    public Action resetArm() {
-        return new SequentialAction(
-                new SleepAction(1),
-                new ParallelAction(
-                        endEffector.diffyIdle,
-                        arm.armObservation
-                ),
-                arm.armUpright
-        );
     }
 
 }
