@@ -129,6 +129,16 @@ public class MainTeleop extends OpMode {
             endEffector.basketPosition();
         }
 
+        if (gamepad2.left_trigger > 0.2) {
+            arm.setArmTarget(ARM_SPECIMEN_SCORE);
+            endEffector.specimenScorePosition();
+        }
+
+        if (gamepad2.right_trigger > 0.2) {
+            arm.setArmTarget(ARM_SPECIMEN_SCORE);
+            endEffector.passthroughSpecimenScorePosition();
+        }
+
         if (gamepad2.dpad_right) {
             arm.setArmTarget(ARM_SPECIMEN_SCORE);
             endEffector.specimenScorePosition();

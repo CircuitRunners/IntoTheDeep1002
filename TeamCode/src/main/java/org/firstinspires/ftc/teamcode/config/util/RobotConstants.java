@@ -29,7 +29,7 @@ public class RobotConstants {
     public static double ARM_MIN = -4.85;
     public static double ARM_MAX = 130;
     public static double ARM_LOWBASKET = 30;
-    public static double ARM_INTAKE = -111;
+    public static double ARM_INTAKE = -112;
     public static double ARM_CLEAR = -100;
     public static double ARM_SPECIMEN = -30;
     public static double ARM_SPECIMEN_SCORE = -54;
