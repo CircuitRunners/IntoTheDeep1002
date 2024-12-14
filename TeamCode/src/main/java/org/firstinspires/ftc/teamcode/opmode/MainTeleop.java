@@ -131,12 +131,12 @@ public class MainTeleop extends OpMode {
 
         if (gamepad2.left_trigger > 0.2) {
             arm.setArmTarget(ARM_SPECIMEN_SCORE);
-            endEffector.specimenScorePosition();
+            endEffector.passthroughSpecimenScorePosition();
         }
 
         if (gamepad2.right_trigger > 0.2) {
-            arm.setArmTarget(ARM_SPECIMEN_SCORE);
-            endEffector.passthroughSpecimenScorePosition();
+         arm.setArmTarget(WALL_GAME_ARM);
+         endEffector.wallGameDiffy();
         }
 
         if (gamepad2.dpad_right) {

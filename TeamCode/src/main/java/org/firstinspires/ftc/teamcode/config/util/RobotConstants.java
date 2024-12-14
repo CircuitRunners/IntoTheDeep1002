@@ -34,6 +34,7 @@ public class RobotConstants {
     public static double ARM_SPECIMEN = -30;
     public static double ARM_SPECIMEN_SCORE = -54;
     public static double ARM_OBSERVATION = 97;
+    public static double WALL_GAME_ARM = 98;
     public static double kP = 3;
     public static double kI = 0.02;
     public static double kD = 0.02;

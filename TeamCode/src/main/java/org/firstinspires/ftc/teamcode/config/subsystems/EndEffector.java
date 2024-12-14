@@ -93,6 +93,10 @@ public class EndEffector {
         diffy1.setPosition(0.38);
         diffy2.setPosition(0.20);
     }
+    public void wallGameDiffy(){
+        diffy1.setPosition(0.49);
+        diffy2.setPosition(0.32);
+    }
 
     public void intakePositionH() {
         diffy1.setPosition(0.36);
