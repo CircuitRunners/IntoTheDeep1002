@@ -166,8 +166,7 @@ public class slightlyLessCheeseAuto extends OpMode {
             case 7:
                 if (!follower.isBusy()) {
                     Actions.runBlocking(arm.armWallIntakeFinal);
-                    Actions.runBlocking(endEffector.diffyWall);
-                    follower.followPath(intakeObs1Path);
+                    follower.followPath(intakeObs1Path,true);
                 //    Actions.runBlocking(new SleepAction(1));
                     setPathState(8);
                 }

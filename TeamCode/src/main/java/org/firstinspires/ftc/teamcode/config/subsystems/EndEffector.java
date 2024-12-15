@@ -63,7 +63,7 @@ public class EndEffector {
     }
 
     public void openClaw() {
-        claw.setPosition(0.30);
+        claw.setPosition(0.50);
     }
 
     public void closeClaw() {

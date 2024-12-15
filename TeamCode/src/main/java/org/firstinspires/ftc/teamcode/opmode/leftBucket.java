@@ -35,7 +35,7 @@ public class leftBucket extends OpMode{
     private Pose bucketPos = new Pose(6.3, 127,Math.toRadians(315));
     private Pose preprePark = new Pose(7,105,Math.toRadians(0));
     private Pose prePark = new Pose(48,105,Math.toRadians(90));
-    private Pose parkPos = new Pose(55, 99, Math.toRadians(90));
+    private Pose parkPos = new Pose(55, 60, Math.toRadians(90));
 
 
     private PathChain basketClear, score, park;
